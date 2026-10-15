@@ -12,8 +12,8 @@ def test_minimal_config_uses_defaults() -> None:
   assert settings.guild_id == 123
   assert settings.owner_id == 456
   assert settings.admin_channel_id is None
-  assert settings.default_interval_s == 60
-  assert settings.global_min_spacing_s == 5.0
+  assert settings.default_interval_s == 10
+  assert settings.global_min_spacing_s == 3.0
   assert settings.vinted_user_agent == HONEST_USER_AGENT
   assert settings.db_path == Path("data/bot.db")
   assert settings.log_level == "INFO"
@@ -25,12 +25,12 @@ def test_token_never_appears_in_repr() -> None:
 
 def test_all_problems_are_reported_at_once() -> None:
   with pytest.raises(ConfigError) as info:
-    parse_settings({"GUILD_ID": "abc", "DEFAULT_INTERVAL_S": "10", "LOG_LEVEL": "loud"})
+    parse_settings({"GUILD_ID": "abc", "DEFAULT_INTERVAL_S": "5", "LOG_LEVEL": "loud"})
   problems = "\n".join(info.value.problems)
   assert "DISCORD_TOKEN fehlt" in problems
   assert "GUILD_ID muss eine ganze Zahl sein" in problems
   assert "OWNER_ID fehlt" in problems
-  assert "DEFAULT_INTERVAL_S muss >= 30" in problems
+  assert "DEFAULT_INTERVAL_S muss >= 10" in problems
   assert "LOG_LEVEL" in problems
 
 

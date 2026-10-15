@@ -147,6 +147,8 @@ def test_status_embed_shows_blocks_and_stats(clock: FakeClock) -> None:
       stats=StatsSummary(
         total=12, by_kind={"catalog": 10, "user": 2}, by_outcome={"200": 11, "403": 1}
       ),
+      spacing_s=3.0,
+      intervals={1: 10.0, 2: 22.5},
       pending=0,
       posted_24h=7,
       admin_channel_id=1,
@@ -159,10 +161,14 @@ def test_status_embed_shows_blocks_and_stats(clock: FakeClock) -> None:
   assert "12 gesamt (Katalog 10 · Verkäufer 2)" in text
   assert "Fehler: 403: 1" in text
   assert "7 · 0 wartend" in text
+  assert "3.0 s (max. 20/min)" in text
+  assert "10 s / 22 s" in text
 
 
 def test_status_embed_all_good(clock: FakeClock) -> None:
-  embed = build_status_embed(StatusData(clock.now, [], {}, StatsSummary(0, {}, {}), 0, 0, None))
+  embed = build_status_embed(
+    StatusData(clock.now, [], {}, StatsSummary(0, {}, {}), 3.0, {}, 0, 0, None)
+  )
   assert embed.title == "✅ Vinted-Bot läuft"
 
 

@@ -90,10 +90,7 @@ def parse_item(raw: dict[str, Any], domain: str) -> VintedItem | None:
   photo = raw.get("photo") if isinstance(raw.get("photo"), dict) else {}
   user = raw.get("user") if isinstance(raw.get("user"), dict) else {}
 
-  # url ist seit 09/2026 relativ ("/items/123-slug"); ältere Antworten waren absolut
-  url = _as_text(raw.get("url")) or f"/items/{item_id}"
-  if url.startswith("/"):
-    url = f"https://www.vinted.{domain}{url}"
+  url = _item_url(_as_text(raw.get("url")), domain, item_id)
 
   return VintedItem(
     id=item_id,
@@ -106,7 +103,7 @@ def parse_item(raw: dict[str, Any], domain: str) -> VintedItem | None:
     brand=_as_text(box.get("first_line")) or _as_text(raw.get("brand_title")),
     size=size or _as_text(raw.get("size_title")),
     condition=condition or _as_text(raw.get("status")),
-    photo_url=_as_text(photo.get("full_size_url")) or _as_text(photo.get("url")),
+    photo_url=https_url(photo.get("full_size_url")) or https_url(photo.get("url")),
     seller_id=_as_int(user.get("id")),
     seller_login=_as_text(user.get("login")),
     seller_business=bool(user.get("business")),
@@ -131,8 +128,31 @@ def parse_seller(raw: dict[str, Any]) -> SellerInfo | None:
     country_iso=normalize_country(_as_text(user.get("country_iso_code"))),
     feedback_reputation=float(reputation) if isinstance(reputation, int | float) else None,
     feedback_count=_as_int(user.get("feedback_count")),
-    photo_url=_as_text(thumb_url) or _as_text(photo.get("url")),
+    photo_url=https_url(thumb_url) or https_url(photo.get("url")),
   )
+
+
+def _item_url(raw_url: str | None, domain: str, item_id: int) -> str:
+  """Artikel-Link – nur auf vinted.<domain> zulassen.
+
+  Der Link landet klickbar in Discord (Titel + Button). Käme aus der Antwort je eine fremde
+  Adresse (API-Änderung, Manipulation), wäre das ein Phishing-Einfallstor. Daher: nur
+  relative Pfade (seit 09/2026 üblich) oder absolute URLs auf unserer Vinted-Domain.
+  """
+  site = f"https://www.vinted.{domain}"
+  if raw_url and raw_url.startswith("/") and not raw_url.startswith("//"):
+    return site + raw_url
+  if raw_url and raw_url.startswith(site + "/"):
+    return raw_url
+  return f"{site}/items/{item_id}"
+
+
+def https_url(value: Any) -> str | None:
+  """Nur https-Adressen ohne Leer-/Steuerzeichen (für Bilder in Embeds)."""
+  text = _as_text(value)
+  if text is None or not text.startswith("https://") or any(c.isspace() for c in text):
+    return None
+  return text
 
 
 def _size_and_condition(label: str, second_line: str | None) -> tuple[str | None, str | None]:

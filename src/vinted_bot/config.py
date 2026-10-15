@@ -17,7 +17,10 @@ from vinted_bot import __version__
 from vinted_bot.vinted.countries import InvalidCountryCodeError, parse_country_codes
 from vinted_bot.vinted.url_parser import InvalidFilterUrlError, parse_filter_url
 
-MIN_INTERVAL_S = 30
+# Untergrenze pro Filter (vinted-sniper nutzt dieselbe). Darunter steigt das Sperrrisiko
+# stark, während der Gewinn klein ist (Vinted zeigt neue Artikel ohnehin verzögert an).
+MIN_INTERVAL_S = 10
+MIN_SPACING_S = 2.0
 
 # Ehrlicher User-Agent: sagt, was wir sind. Ob Vinted ihn akzeptiert, klärt die M0-Probe.
 HONEST_USER_AGENT = f"VintedPrivateMonitor/{__version__} (private, non-commercial, low rate)"
@@ -87,16 +90,16 @@ def parse_settings(env: Mapping[str, str]) -> Settings:
   owner_id = int_value("OWNER_ID", required=True)
   admin_channel_id = int_value("ADMIN_CHANNEL_ID", required=False)
 
-  interval = int_value("DEFAULT_INTERVAL_S", required=False, default=60)
+  interval = int_value("DEFAULT_INTERVAL_S", required=False, default=10)
   if interval is not None and interval < MIN_INTERVAL_S:
     problems.append(f"DEFAULT_INTERVAL_S muss >= {MIN_INTERVAL_S} sein (ist: {interval})")
 
-  spacing_raw = get("GLOBAL_MIN_SPACING_S") or "5"
-  spacing = 5.0
+  spacing_raw = get("GLOBAL_MIN_SPACING_S") or "3"
+  spacing = 3.0
   try:
     spacing = float(spacing_raw)
-    if spacing < 1:
-      problems.append(f"GLOBAL_MIN_SPACING_S muss >= 1 sein (ist: {spacing})")
+    if spacing < MIN_SPACING_S:
+      problems.append(f"GLOBAL_MIN_SPACING_S muss >= {MIN_SPACING_S:g} sein (ist: {spacing})")
   except ValueError:
     problems.append(f"GLOBAL_MIN_SPACING_S muss eine Zahl sein (ist: {spacing_raw!r})")
 

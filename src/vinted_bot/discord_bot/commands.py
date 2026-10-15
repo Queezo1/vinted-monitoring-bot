@@ -80,7 +80,7 @@ class FilterCommands(app_commands.Group):
     link="Vinted-Link aus der Adresszeile (vinted.at oder vinted.de)",
     name="Anzeigename, wird auch Kanalname (z. B. ralph-lauren-jacken)",
     laender="Nur Verkäufer aus diesen Ländern, z. B. at,de,it,fr – leer = alle",
-    intervall="Abfrageintervall in Sekunden (30–3600, Standard 60)",
+    intervall="Abfrageintervall in Sekunden (10–3600, Standard 10)",
     kanal="Vorhandenen Kanal verwenden statt einen neuen anzulegen",
   )
   async def add(
@@ -89,7 +89,7 @@ class FilterCommands(app_commands.Group):
     link: str,
     name: str | None = None,
     laender: str | None = None,
-    intervall: app_commands.Range[int, 30, 3600] | None = None,
+    intervall: app_commands.Range[int, 10, 3600] | None = None,
     kanal: discord.TextChannel | None = None,
   ) -> None:
     # Kanal anlegen kann länger als 3 s dauern -> Antwort ankündigen
@@ -181,12 +181,12 @@ class FilterCommands(app_commands.Group):
     await _reply(interaction, f"🌍 Geändert:\n{describe_filter(flt)}")
 
   @app_commands.command(name="intervall", description="Abfrageintervall ändern")
-  @app_commands.describe(filter="Welcher Filter?", sekunden="30–3600")
+  @app_commands.describe(filter="Welcher Filter?", sekunden="10–3600")
   async def interval(
     self,
     interaction: discord.Interaction,
     filter: int,  # noqa: A002
-    sekunden: app_commands.Range[int, 30, 3600],
+    sekunden: app_commands.Range[int, 10, 3600],
   ) -> None:
     flt = await self.service.set_interval(filter, sekunden)
     await _reply(interaction, f"⏱️ Geändert:\n{describe_filter(flt)}")
@@ -201,6 +201,9 @@ class FilterCommands(app_commands.Group):
   async def filter_autocomplete(
     self, interaction: discord.Interaction, current: str
   ) -> list[app_commands.Choice[int]]:
+    # Autovervollständigung läuft NICHT durch interaction_check -> selbst prüfen
+    if interaction.user.id != self.bot.settings.owner_id:
+      return []
     filters = await self.service.list()
     current = current.lower()
     choices = [

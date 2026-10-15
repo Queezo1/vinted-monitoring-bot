@@ -1,8 +1,10 @@
 """Die Abfrageschleife für EINEN Filter. Jeder Filter läuft als eigene asyncio-Task.
 
 Ein Durchlauf (`poll_once`):
-  Katalog holen -> parsen -> Dedupe -> (Verkäufer nachschlagen -> Länderfilter)
+  Katalog holen -> parsen -> Dedupe -> (nur bei Länderfilter: Verkäufer nachschlagen)
   -> Ergebnis in EINER Transaktion speichern -> Dispatcher wecken.
+Fotos, Beschreibung und (ohne Länderfilter) Flagge/Bewertung lädt der Enricher NACH dem
+Posten nach – so steht ein neuer Artikel so schnell wie möglich in Discord.
 `poll_once` gibt zurück, wie lange bis zum nächsten Durchlauf gewartet werden soll.
 
 403/429 regelt der DomainGuard für alle Filter einer Domain gemeinsam (siehe domain_guard.py).
@@ -15,12 +17,17 @@ import asyncio
 import logging
 import random
 from collections.abc import Awaitable, Callable
-from dataclasses import replace
 from datetime import datetime
 
 from vinted_bot.core.dedupe import select_new
 from vinted_bot.core.domain_guard import DomainBlock, DomainGuard
-from vinted_bot.core.notifications import Notifier, NullNotifier, Severity, StatusEvent
+from vinted_bot.core.notifications import (
+  Notifier,
+  NullNotifier,
+  Severity,
+  StatusEvent,
+  quote_error,
+)
 from vinted_bot.core.seller_lookup import SellerResolver
 from vinted_bot.storage.repository import FilterRow, NewItem, Repository, utc_now
 from vinted_bot.vinted.client import VintedClient
@@ -32,8 +39,7 @@ from vinted_bot.vinted.errors import (
   VintedError,
   VintedNetworkError,
 )
-from vinted_bot.vinted.item_page import parse_item_page
-from vinted_bot.vinted.models import SellerInfo, VintedItem, parse_item
+from vinted_bot.vinted.models import SellerInfo, parse_item
 
 log = logging.getLogger(__name__)
 
@@ -55,10 +61,10 @@ class FilterPoller:
     client: VintedClient,
     sellers: SellerResolver,
     on_new_items: Callable[[], None],
+    interval_for: Callable[[FilterRow], float] | None = None,
+    on_throttled: Callable[[], None] | None = None,
     guard: DomainGuard | None = None,
     notifier: Notifier | None = None,
-    seller_lookup: bool = True,
-    item_details: bool = True,
     sleep: Callable[[float], Awaitable[None]] = asyncio.sleep,
     rng: Callable[[], float] = random.random,
     now: Callable[[], datetime] = utc_now,
@@ -68,11 +74,12 @@ class FilterPoller:
     self._client = client
     self._sellers = sellers
     self._on_new_items = on_new_items
+    # Effektives Intervall (z. B. gestreckt bei vielen Filtern); Standard: das eingestellte
+    self._interval_for = interval_for or (lambda flt: flt.interval_s)
+    self._on_throttled = on_throttled or (lambda: None)
     self._guard = guard or DomainGuard(now)
     self._notifier = notifier or NullNotifier()
     self._now = now
-    self._seller_lookup = seller_lookup
-    self._item_details = item_details
     self._sleep = sleep
     self._rng = rng
     self._consecutive_errors = 0
@@ -99,6 +106,7 @@ class FilterPoller:
       # Gilt für die ganze Domain: alle Filter pausieren gemeinsam
       already_blocked = self._guard.blocked_until(flt.domain) is not None
       block = self._guard.report_error(flt.domain, error)
+      self._on_throttled()  # globalen Takt verlangsamen
       await self._repo.record_poll_error(flt.id, f"{type(error).__name__}: {error}")
       log.warning(
         "vinted.%s gesperrt (%s, Stufe %s) bis %s – ausgelöst von Filter %s: %s",
@@ -130,7 +138,8 @@ class FilterPoller:
           StatusEvent(
             Severity.WARNING,
             f"Filter #{flt.id} {flt.name}: wiederholte Fehler",
-            f"{fail_count} Fehler in Folge. Letzter: `{type(error).__name__}: {error}`\n"
+            f"{fail_count} Fehler in Folge. Letzter: "
+            f"{quote_error(f'{type(error).__name__}: {error}')}\n"
             f"Nächster Versuch in {delay_s / 60:.0f} min. Bei `MalformedResponseError` hat "
             "Vinted vermutlich die API geändert.",
             key=f"failing:{flt.id}",
@@ -158,7 +167,7 @@ class FilterPoller:
           key=f"filter-ok:{flt.id}:{flt.fail_count}",
         )
       )
-    return self._jittered(flt.interval_s)
+    return self._jittered(self._interval_for(flt))
 
   async def _poll(self, flt: FilterRow) -> None:
     raw_items = await self._client.fetch_catalog(flt.domain, flt.api_params)
@@ -171,11 +180,14 @@ class FilterPoller:
 
     new_items: list[NewItem] = []
     skipped = list(result.skipped_ids)
-    lookups_allowed = self._seller_lookup or bool(flt.countries)
-    details_allowed = self._item_details
+    # Vor dem Posten nur nachschlagen, wenn der Länderfilter es verlangt (sonst Enricher)
+    lookups_allowed = bool(flt.countries)
     for item in result.new_items:
       seller: SellerInfo | None = None
-      if lookups_allowed and item.seller_id is not None:
+      if item.seller_id is not None:
+        # Aus dem Cache kostet es nichts – dann gleich mit Flagge/Sternen posten
+        seller = await self._sellers.cached(item.seller_id)
+      if seller is None and lookups_allowed and item.seller_id is not None:
         try:
           seller = await self._sellers.resolve(flt.domain, item.seller_id)
         except (BlockedError, RateLimitedError) as error:
@@ -183,6 +195,7 @@ class FilterPoller:
           # ohne Land/Bewertung raus, statt Vinted weiter zu bedrängen.
           log.warning("Verkäufer-Lookup gestoppt: %s", error)
           lookups_allowed = False
+          self._on_throttled()
           self._post_lookup_blocked(flt.domain, "Verkäufer-Abfrage", error)
         except VintedError as error:
           log.warning("Verkäufer %s nicht abrufbar: %s", item.seller_id, error)
@@ -196,17 +209,6 @@ class FilterPoller:
         log.info(
           "Filter %s: Land für Artikel %s unbekannt – wird trotzdem gepostet", flt.id, item.id
         )
-
-      # Erst NACH dem Länderfilter: die Artikelseite nur für Artikel laden, die gepostet werden
-      if details_allowed:
-        try:
-          item = await self._with_details(flt.domain, item)
-        except (BlockedError, RateLimitedError) as error:
-          log.warning("Artikelseiten-Abruf gestoppt: %s", error)
-          details_allowed = False
-          self._post_lookup_blocked(flt.domain, "Artikelseite", error)
-        except VintedError as error:
-          log.warning("Artikelseite %s nicht abrufbar: %s", item.id, error)
       new_items.append(NewItem(item=item, seller=seller))
 
     await self._repo.save_poll_result(
@@ -231,23 +233,12 @@ class FilterPoller:
     if new_items:
       self._on_new_items()
 
-  async def _with_details(self, domain: str, item: VintedItem) -> VintedItem:
-    page = await self._client.fetch_item_page(domain, item.id)
-    details = parse_item_page(page, item.id, item.title)
-    if not details.photo_urls:
-      log.info("Artikel %s: keine Fotos auf der Artikelseite gefunden", item.id)
-    return replace(
-      item,
-      photo_urls=details.photo_urls or item.photo_urls,
-      description=details.description,
-    )
-
   def _post_lookup_blocked(self, domain: str, what: str, error: VintedError) -> None:
     self._notifier.post(
       StatusEvent(
         Severity.WARNING,
         f"{what} auf vinted.{domain} abgewiesen",
-        f"`{error}` – Artikel werden vorerst ohne diese Zusatzinfos gepostet "
+        f"{quote_error(error)} – Artikel werden vorerst ohne diese Zusatzinfos gepostet "
         "(keine Flagge/Bewertung bzw. nur 1 Foto). Der Katalog selbst läuft weiter.",
         key=f"lookup:{domain}:{what}",
       )

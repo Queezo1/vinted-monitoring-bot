@@ -26,6 +26,14 @@ class StatusEvent:
   key: str
 
 
+def quote_error(error: object, limit: int = 300) -> str:
+  """Fehlertext (kann Teile der Vinted-Antwort enthalten) sicher als Inline-Code darstellen."""
+  text = " ".join(str(error).split()).replace("`", "'")
+  if len(text) > limit:
+    text = text[: limit - 1] + "…"
+  return f"`{text}`"
+
+
 class Notifier(Protocol):
   def post(self, event: StatusEvent) -> None: ...
 

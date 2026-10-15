@@ -27,6 +27,9 @@ class FilterManager:
       self._run(poller, delay_s), name=f"poller-{filter_id}"
     )
 
+  def active_count(self) -> int:
+    return sum(1 for task in self._tasks.values() if not task.done())
+
   def start_all(self, filter_ids: list[int]) -> None:
     for index, filter_id in enumerate(filter_ids):
       self.start(filter_id, delay_s=index * STARTUP_STAGGER_S)

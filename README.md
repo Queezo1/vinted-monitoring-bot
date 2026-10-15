@@ -32,6 +32,22 @@ Der Bot läuft, solange dein PC an ist. Er startet unsichtbar bei der Anmeldung 
 
 Der Bot läuft immer nur einmal. Ein zweiter Start beendet sich sofort, die Sperrdatei ist `data\bot.lock`. Ist das Netzwerk direkt nach dem Login noch nicht bereit, versucht er es nach 30 s erneut, bei weiteren Fehlschlägen mit steigenden Pausen bis 5 min. Mit `/status` in Discord siehst du jederzeit, ob er läuft.
 
+## Tempo: wie schnell sehe ich neue Artikel?
+
+- **Takt:** Höchstens 20 Anfragen/min an Vinted (3 s Abstand), verteilt auf alle Filter. Pro Filter mindestens alle 10 s. Bei mehreren Filtern wird das automatisch gestreckt: 6 Filter × 3 s × 1,5 ≈ 27 s. `/status` zeigt den aktuellen Wert.
+- **Sofort posten:** Neue Artikel gehen direkt nach dem Abruf raus. Fotos 2–3, Beschreibung und bei Filtern ohne Länderfilter auch Flagge und Bewertung werden danach nachgeladen, und die Nachricht wird ergänzt.
+- **Länderfilter kosten Zeit:** Für jeden noch unbekannten Verkäufer ist vor dem Posten eine Abfrage nötig. Bekannte Verkäufer liegen 30 Tage im Cache.
+- **Selbstschutz:** Nach 429/403 bremst der Bot selbst ab (Abstand × 1,5, bis 10 s) und wird nach 30 ruhigen Minuten wieder schneller. Schneller als 20 Anfragen/min ist bewusst nicht einstellbar (Minimum 2 s ≈ 30/min).
+- **Grenzen:** Vinted prüft neue Inserate teils, bevor sie in der Suche erscheinen. Diese Verzögerung kann kein Bot umgehen. Kommerzielle Bots, die mit vielen IPs (Proxys) im Sekundentakt abfragen, sind ggf. schneller. Das schließen die Leitplanken dieses Projekts bewusst aus.
+
+## Sicherheit
+
+- **`.env` schützen:** Sie enthält dein Bot-Token. Auf `D:\` erbt sie die Rechte des Laufwerks und ist für alle lokalen Benutzer lesbar. Einmalig ausführen (PowerShell im Projektordner):
+  `icacls .env /inheritance:r /grant:r "${env:USERNAME}:(R,W)"`
+- **Token geleakt?** Im Developer Portal unter *Bot → Reset Token* ein neues Token erzeugen, in die `.env` eintragen und den Bot neu starten.
+- **Was der Bot absichert:** Er pingt niemanden (`AllowedMentions.none`). Texte von Verkäufern werden entschärft, sodass getarnte Links nicht klickbar sind. Artikel-Links sind nur auf `vinted.at`/`vinted.de` erlaubt. Antworten von Vinted sind auf 8 MB begrenzt. Nur `OWNER_ID` darf Commands nutzen, auch die Autovervollständigung.
+- **Prüfen:** `pip-audit -r requirements.txt` sucht nach bekannten Lücken in den Abhängigkeiten (Stand 15.10.2026: keine).
+
 ## Einrichtung (Windows, PowerShell)
 
 ```powershell

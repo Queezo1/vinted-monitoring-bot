@@ -1,5 +1,6 @@
 """Poller + echte SQLite (in-memory) + gefälschter Vinted-Client."""
 
+from datetime import timedelta
 from typing import Any
 
 from tests.conftest import FakeClock, raw_item
@@ -34,7 +35,9 @@ class FakeVinted:
       raise result
     return result
 
-  async def fetch_user(self, domain: str, user_id: int) -> dict[str, Any]:
+  async def fetch_user(
+    self, domain: str, user_id: int, *, low_priority: bool = False
+  ) -> dict[str, Any]:
     self.user_calls.append(user_id)
     if self.user_error:
       raise self.user_error
@@ -42,7 +45,7 @@ class FakeVinted:
     return {"user": {"id": user_id, "country_iso_code": country, "feedback_reputation": 1.0,
                      "feedback_count": 10}}  # fmt: skip
 
-  async def fetch_item_page(self, domain: str, item_id: int) -> str:
+  async def fetch_item_page(self, domain: str, item_id: int, *, low_priority: bool = True) -> str:
     self.page_calls.append(item_id)
     if self.page_error:
       raise self.page_error
@@ -136,8 +139,18 @@ async def test_country_filter(repo: Repository) -> None:
   assert sorted(fake.user_calls) == [1, 2, 3]
 
 
-async def test_seller_cache_avoids_repeated_lookups(repo: Repository) -> None:
+async def test_without_country_filter_no_lookup_before_posting(repo: Repository) -> None:
+  # Ohne Länderfilter wird sofort gepostet, Verkäuferinfos lädt später der Enricher
   poller, fake, _ = await setup(repo)
+  fake.catalogs = [[], [raw_item(2, seller_id=1)]]
+  await poll(poller, repo)
+  await poll(poller, repo)
+  assert fake.user_calls == [] and fake.page_calls == []
+  assert await outbox_ids(repo) == [2]
+
+
+async def test_seller_cache_avoids_repeated_lookups(repo: Repository) -> None:
+  poller, fake, _ = await setup(repo, countries=("AT",))
   fake.catalogs = [[], [raw_item(2, seller_id=1)], [raw_item(3, seller_id=1)]]
   for _ in range(3):
     await poll(poller, repo)
@@ -153,7 +166,7 @@ async def test_unknown_country_is_still_posted(repo: Repository) -> None:
 
 
 async def test_blocked_seller_lookup_stops_lookups_but_posts(repo: Repository) -> None:
-  poller, fake, _ = await setup(repo)
+  poller, fake, _ = await setup(repo, countries=("AT",))
   fake.user_error = BlockedError("403")
   fake.catalogs = [[], [raw_item(3, seller_id=1), raw_item(2, seller_id=2)]]
   await poll(poller, repo)
@@ -223,7 +236,7 @@ async def test_repeated_other_errors_notify_once_then_recover(repo: Repository) 
 async def test_blocked_lookup_notifies_but_does_not_block_domain(repo: Repository) -> None:
   guard = DomainGuard()
   notifier = NullNotifier()
-  poller, fake, _ = await setup(repo, guard=guard, notifier=notifier)
+  poller, fake, _ = await setup(repo, countries=("AT",), guard=guard, notifier=notifier)
   fake.user_error = BlockedError("403")
   fake.catalogs = [[], [raw_item(2)]]
   await poll(poller, repo)
@@ -239,22 +252,17 @@ async def test_run_stops_when_filter_paused(repo: Repository) -> None:
   await poller.run()  # muss sofort zurückkehren statt endlos zu laufen
 
 
-async def test_item_details_only_for_posted_items(repo: Repository) -> None:
-  poller, fake, _ = await setup(repo, countries=("AT",))
-  fake.catalogs = [[], [raw_item(12, seller_id=3), raw_item(11, seller_id=1)]]  # 3 = IT
+async def test_throttle_callback_and_effective_interval(repo: Repository, clock: FakeClock) -> None:
+  throttled: list[int] = []
+  poller, fake, _ = await setup(
+    repo,
+    guard=DomainGuard(clock),
+    now=clock,
+    on_throttled=lambda: throttled.append(1),
+    interval_for=lambda flt: 22.5,
+  )
+  fake.catalogs = [RateLimitedError("429", retry_after_s=None), [raw_item(1)]]
   await poll(poller, repo)
-  await poll(poller, repo)
-  assert fake.page_calls == [11]  # IT-Artikel wurde gefiltert -> keine Artikelseite geladen
-  [entry] = await repo.pending_outbox()
-  assert entry.item.photo_urls[:2] == ("https://img/11-1.webp", "https://img/11-2.webp")
-  assert entry.item.description == "Beschreibung 11"
-
-
-async def test_item_page_failure_still_posts(repo: Repository) -> None:
-  poller, fake, _ = await setup(repo)
-  fake.page_error = BlockedError("403")
-  fake.catalogs = [[], [raw_item(3), raw_item(2)]]
-  await poll(poller, repo)
-  await poll(poller, repo)
-  assert await outbox_ids(repo) == [2, 3]
-  assert len(fake.page_calls) == 1  # nach 403 keine weiteren Seitenabrufe
+  assert throttled == [1]  # globaler Takt wird gebremst
+  clock.now += timedelta(minutes=5)
+  assert await poll(poller, repo) == 22.5  # gestrecktes Intervall statt 60

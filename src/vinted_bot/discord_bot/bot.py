@@ -6,7 +6,8 @@ Lebenszyklus:
   close()       – beim Beenden: Tasks stoppen, HTTP-Client und Datenbank schließen
 
 Hintergrund-Tasks (neben einem Poller pro Filter):
-  dispatcher    – postet neue Artikel
+  dispatcher    – postet neue Artikel (sofort, nur mit den Daten aus der Suche)
+  enricher      – lädt danach Fotos/Beschreibung/Verkäuferinfos nach und ergänzt den Post
   admin         – sendet Statusmeldungen (#vinted-status)
   housekeeping  – räumt alle 6 h alte Daten auf
 """
@@ -26,9 +27,10 @@ from vinted_bot import __version__
 from vinted_bot.config import Settings
 from vinted_bot.core.dispatcher import Dispatcher, PermanentSendError
 from vinted_bot.core.domain_guard import DomainGuard
+from vinted_bot.core.enricher import Enricher
 from vinted_bot.core.filter_manager import FilterManager
 from vinted_bot.core.filter_service import FilterService
-from vinted_bot.core.notifications import Severity, StatusEvent
+from vinted_bot.core.notifications import Severity, StatusEvent, quote_error
 from vinted_bot.core.poller import FilterPoller
 from vinted_bot.core.seller_lookup import SellerResolver
 from vinted_bot.discord_bot.admin import AdminNotifier, resolve_admin_channel, status_embed
@@ -36,7 +38,7 @@ from vinted_bot.discord_bot.commands import FilterCommands
 from vinted_bot.discord_bot.embeds import build_message
 from vinted_bot.discord_bot.status import StatusData, make_status_command
 from vinted_bot.storage.db import open_database
-from vinted_bot.storage.repository import OutboxEntry, Repository, utc_now
+from vinted_bot.storage.repository import FilterRow, OutboxEntry, Repository, utc_now
 from vinted_bot.vinted.client import VintedClient
 from vinted_bot.vinted.rate_limiter import GlobalRateLimiter
 from vinted_bot.vinted.url_parser import parse_filter_url
@@ -48,12 +50,18 @@ OUTBOX_MAX_AGE = timedelta(hours=1)
 HOUSEKEEPING_EVERY_S = 6 * 3600
 KEEP_ITEMS = timedelta(days=30)
 KEEP_SELLERS = timedelta(days=60)
+# Anteil des Anfrage-Budgets für Katalog-Abfragen; der Rest bleibt für Länder-Lookups und
+# das Nachladen. Bei 5 Filtern und 3 s Abstand: 5 × 3 s × 1,5 = 22,5 s pro Filter.
+CATALOG_BUDGET_FACTOR = 1.5
 
 
 class VintedBot(discord.Client):
   def __init__(self, settings: Settings) -> None:
     # Keine privilegierten Intents nötig: wir lesen keine Nachrichten und keine Mitglieder
-    super().__init__(intents=discord.Intents.default())
+    # AllowedMentions.none(): Der Bot pingt niemals jemanden, egal was in Texten steht
+    super().__init__(
+      intents=discord.Intents.default(), allowed_mentions=discord.AllowedMentions.none()
+    )
     self.tree = app_commands.CommandTree(self)
     self.settings = settings
     self.started_at = utc_now()
@@ -73,14 +81,23 @@ class VintedBot(discord.Client):
     self.repo = Repository(self._conn)
 
     self._http_client = httpx.AsyncClient(timeout=15.0, follow_redirects=True)
-    self.vinted = VintedClient(
-      self._http_client,
-      GlobalRateLimiter(settings.global_min_spacing_s),
-      settings.vinted_user_agent,
-    )
+    self.limiter = GlobalRateLimiter(settings.global_min_spacing_s)
+    self.vinted = VintedClient(self._http_client, self.limiter, settings.vinted_user_agent)
     sellers = SellerResolver(self.repo, self.vinted)
+    self.enricher = Enricher(
+      self.vinted,
+      sellers,
+      self._edit_message,
+      seller_lookup=settings.seller_lookup,
+      item_details=settings.item_details,
+      notifier=self.notifier,
+      on_throttled=self.limiter.penalize,
+    )
     dispatcher = Dispatcher(
-      self.repo, self._send_entry, on_permanent_failure=self._on_channel_unusable
+      self.repo,
+      self._send_entry,
+      on_permanent_failure=self._on_channel_unusable,
+      on_sent=self.enricher.submit,
     )
 
     def make_poller(filter_id: int) -> FilterPoller:
@@ -90,10 +107,10 @@ class VintedBot(discord.Client):
         client=self.vinted,
         sellers=sellers,
         on_new_items=dispatcher.wake,
+        interval_for=self.effective_interval,
+        on_throttled=self.limiter.penalize,
         guard=self.guard,  # EIN Guard für alle Poller -> Sperren gelten domainweit
         notifier=self.notifier,
-        seller_lookup=settings.seller_lookup,
-        item_details=settings.item_details,
       )
 
     self.filters = FilterManager(make_poller)
@@ -115,6 +132,7 @@ class VintedBot(discord.Client):
     log.info("Starte %s aktive(n) Filter: %s", len(active), ", ".join(f.name for f in active))
     self.filters.start_all([f.id for f in active])
     self._start_task(self._after_ready(dispatcher.run()), "dispatcher")
+    self._start_task(self._after_ready(self.enricher.run()), "enricher")
     self._start_task(self._after_ready(self.notifier.run()), "admin")
     self._start_task(self._housekeeping(), "housekeeping")
 
@@ -148,6 +166,15 @@ class VintedBot(discord.Client):
     if self._conn is not None:
       await self._conn.close()
     await super().close()
+
+  def effective_interval(self, flt: FilterRow) -> float:
+    """Eingestelltes Intervall – bei vielen Filtern gestreckt, damit das Budget reicht.
+
+    Alle Filter teilen sich EINE IP und damit ein Anfrage-Budget (Abstand ≥ spacing_s).
+    Steigt der Abstand nach 429/403, werden auch die Intervalle automatisch länger.
+    """
+    budget = self.filters.active_count() * self.limiter.spacing_s * CATALOG_BUDGET_FACTOR
+    return max(float(flt.interval_s), budget)
 
   # --- Interna ---------------------------------------------------------------
 
@@ -183,7 +210,7 @@ class VintedBot(discord.Client):
     )
     log.info("Start-Filter %s angelegt (%s)", filter_id, parsed.canonical_url)
 
-  async def _send_entry(self, entry: OutboxEntry) -> None:
+  async def _send_entry(self, entry: OutboxEntry) -> discord.Message:
     channel = self.get_channel(entry.channel_id)
     if channel is None:
       try:
@@ -195,10 +222,19 @@ class VintedBot(discord.Client):
 
     embeds, view = build_message(entry)
     try:
-      await channel.send(embeds=embeds, view=view)
+      message = await channel.send(embeds=embeds, view=view)
     except (discord.Forbidden, discord.NotFound) as error:
       raise PermanentSendError(f"Kanal {entry.channel_id} nicht nutzbar: {error}") from error
     log.info("Gepostet: %s (Filter %s)", entry.item.title, entry.filter_name)
+    return message
+
+  async def _edit_message(self, message: discord.Message, entry: OutboxEntry) -> None:
+    """Vom Enricher aufgerufen: Post mit Galerie/Beschreibung/Flagge aktualisieren."""
+    embeds, view = build_message(entry)
+    try:
+      await message.edit(embeds=embeds, view=view)
+    except discord.NotFound:
+      log.info("Nachricht zu Artikel %s wurde inzwischen gelöscht", entry.item_id)
 
   async def _on_channel_unusable(self, entry: OutboxEntry, reason: str) -> None:
     """Kanal gelöscht oder keine Rechte: Filter pausieren, statt Discord weiter zu bedrängen."""
@@ -211,7 +247,7 @@ class VintedBot(discord.Client):
       StatusEvent(
         Severity.ERROR,
         f"Filter #{flt.id} {flt.name} pausiert",
-        f"Sein Kanal ist nicht mehr nutzbar ({reason}).\n"
+        f"Sein Kanal ist nicht mehr nutzbar: {quote_error(reason)}\n"
         "Kanal wiederherstellen und `/filter resume`, oder `/filter remove` und neu anlegen.",
         key=f"channel:{flt.id}",
       )
@@ -234,6 +270,8 @@ class VintedBot(discord.Client):
       filters=filters,
       blocks={domain: self.guard.current(domain) for domain in domains},
       stats=self.vinted.stats.summary(),
+      spacing_s=self.limiter.spacing_s,
+      intervals={f.id: self.effective_interval(f) for f in filters if not f.paused},
       pending=await self.repo.count_pending(),
       posted_24h=await self.repo.count_posted_since(utc_now() - timedelta(hours=24)),
       admin_channel_id=int(admin_id) if admin_id else None,

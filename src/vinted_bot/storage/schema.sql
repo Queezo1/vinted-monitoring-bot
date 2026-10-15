@@ -1,4 +1,4 @@
--- Schema Version 1. Änderungen später nur über neue Migrationen in db.py.
+-- Schema Version 2 (v2: Mindestintervall 10 s statt 30 s). Änderungen nur über Migrationen in db.py.
 
 CREATE TABLE IF NOT EXISTS schema_version (version INTEGER NOT NULL);
 
@@ -12,7 +12,7 @@ CREATE TABLE IF NOT EXISTS filters (
   channel_id       INTEGER NOT NULL,              -- Discord-Kanal
   -- "AT,DE"; leer = alle Länder. NOT NULL, weil NULL in UNIQUE-Constraints nie gleich ist
   countries        TEXT    NOT NULL DEFAULT '',
-  interval_s       INTEGER NOT NULL DEFAULT 60 CHECK (interval_s >= 30),
+  interval_s       INTEGER NOT NULL DEFAULT 10 CHECK (interval_s >= 10),
   paused           INTEGER NOT NULL DEFAULT 0,
   baseline_done    INTEGER NOT NULL DEFAULT 0,    -- 0 = nächster Lauf setzt nur die Baseline
   max_seen_id      INTEGER,                       -- ID-Wasserstand (siehe core/dedupe.py)

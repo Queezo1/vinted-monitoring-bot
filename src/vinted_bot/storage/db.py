@@ -1,13 +1,17 @@
-"""SQLite-Verbindung öffnen und Schema anlegen."""
+"""SQLite-Verbindung öffnen, Schema anlegen und ältere Datenbanken migrieren."""
 
 from __future__ import annotations
 
+import logging
+import re
 from importlib import resources
 from pathlib import Path
 
 import aiosqlite
 
-SCHEMA_VERSION = 1
+log = logging.getLogger(__name__)
+
+SCHEMA_VERSION = 2
 
 
 async def open_database(path: Path | str) -> aiosqlite.Connection:
@@ -30,8 +34,51 @@ async def _migrate(conn: aiosqlite.Connection) -> None:
     row = await cursor.fetchone()
   if row is None:
     await conn.execute("INSERT INTO schema_version (version) VALUES (?)", (SCHEMA_VERSION,))
-  elif row["version"] > SCHEMA_VERSION:
-    raise RuntimeError(
-      f"Datenbank hat Schema {row['version']}, dieser Code kennt nur {SCHEMA_VERSION}"
-    )
+    await conn.commit()
+    return
+  version = row["version"]
+  if version > SCHEMA_VERSION:
+    raise RuntimeError(f"Datenbank hat Schema {version}, dieser Code kennt nur {SCHEMA_VERSION}")
+  if version < 2:
+    await _migrate_to_v2(conn)
   await conn.commit()
+
+
+async def _migrate_to_v2(conn: aiosqlite.Connection) -> None:
+  """v1 -> v2: Mindestintervall 10 s statt 30 s.
+
+  SQLite kann CHECK-Bedingungen nicht ändern, deshalb wird die Tabelle nach dem offiziellen
+  Verfahren neu aufgebaut (https://sqlite.org/lang_altertable.html, "12 Schritte").
+  Fremdschlüssel werden dabei kurz abgeschaltet – sonst würde DROP TABLE per ON DELETE CASCADE
+  alle gesehenen Artikel mitlöschen.
+  """
+  async with conn.execute(
+    "SELECT sql FROM sqlite_master WHERE type = 'table' AND name = 'filters'"
+  ) as cursor:
+    row = await cursor.fetchone()
+  old_sql: str = row["sql"]
+  new_sql = re.sub(
+    r"CREATE TABLE (IF NOT EXISTS )?\"?filters\"?", "CREATE TABLE filters_new", old_sql
+  )
+  new_sql = new_sql.replace("CHECK (interval_s >= 30)", "CHECK (interval_s >= 10)")
+
+  await conn.commit()
+  await conn.execute("PRAGMA foreign_keys = OFF")
+  try:
+    await conn.executescript(
+      f"""
+      BEGIN;
+      {new_sql};
+      INSERT INTO filters_new SELECT * FROM filters;
+      DROP TABLE filters;
+      ALTER TABLE filters_new RENAME TO filters;
+      UPDATE schema_version SET version = 2;
+      COMMIT;
+      """
+    )
+    async with conn.execute("PRAGMA foreign_key_check") as cursor:
+      if await cursor.fetchall():
+        raise RuntimeError("Migration v2: Fremdschlüssel inkonsistent")
+  finally:
+    await conn.execute("PRAGMA foreign_keys = ON")
+  log.info("Datenbank auf Schema 2 migriert (Mindestintervall 10 s)")

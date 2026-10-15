@@ -35,9 +35,11 @@ class CountingLimiter(GlobalRateLimiter):
   def __init__(self) -> None:
     super().__init__(0)
     self.calls = 0
+    self.low_priority_calls = 0
 
-  async def acquire(self) -> None:
+  async def acquire(self, *, low_priority: bool = False) -> None:
     self.calls += 1
+    self.low_priority_calls += int(low_priority)
 
 
 @pytest.fixture
@@ -184,3 +186,41 @@ async def test_fetch_item_page_403(client: VintedClient) -> None:
   respx.get("https://www.vinted.at/items/5").mock(return_value=httpx.Response(403))
   with pytest.raises(BlockedError):
     await client.fetch_item_page("at", 5)
+
+
+@respx.mock
+async def test_item_page_is_low_priority(client: VintedClient, limiter: CountingLimiter) -> None:
+  respx.get("https://www.vinted.at/items/5").mock(return_value=httpx.Response(200, text="x"))
+  await client.fetch_item_page("at", 5)
+  assert limiter.low_priority_calls == 1
+
+
+@respx.mock
+async def test_oversized_response_is_rejected(
+  client: VintedClient, monkeypatch: pytest.MonkeyPatch
+) -> None:
+  monkeypatch.setattr("vinted_bot.vinted.client.MAX_RESPONSE_BYTES", 1000)
+  respx.get("https://www.vinted.at/items/5").mock(return_value=httpx.Response(200, text="x" * 5000))
+  with pytest.raises(MalformedResponseError, match="größer"):
+    await client.fetch_item_page("at", 5)
+  assert client.stats.summary().by_outcome == {"too_large": 1}
+
+
+@respx.mock
+async def test_gzip_compressed_responses_are_decoded_once(client: VintedClient) -> None:
+  """Regression: Vinted antwortet komprimiert – das darf nicht doppelt entpackt werden."""
+  import gzip
+  import json
+
+  body = gzip.compress(json.dumps({"items": [{"id": 1}]}).encode())
+  respx.get(HOME).mock(
+    return_value=httpx.Response(
+      200,
+      headers={"set-cookie": "access_token_web=t; Path=/", "content-encoding": "gzip"},
+      content=gzip.compress(b"<html></html>"),
+    )
+  )
+  respx.get(CATALOG).mock(
+    return_value=httpx.Response(200, headers={"content-encoding": "gzip"}, content=body)
+  )
+  assert await client.fetch_catalog("at", {}) == [{"id": 1}]

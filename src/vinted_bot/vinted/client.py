@@ -8,6 +8,9 @@ Ablauf (per M0-Probe am 15.10.2026 bestätigt):
 Leitplanken: ehrlicher User-Agent aus der Konfiguration, keine Browser-Imitations-Header,
 kein Proxy, jeder Request geht durch den globalen Rate-Limiter. Der einzige automatische
 Wiederholungsversuch ist bei 401 (abgelaufene Session) – genau einmal.
+
+Priorität: Katalog und Länder-Lookups (entscheiden, OB gepostet wird) sind "hoch".
+Fotos/Beschreibung nachladen ist "niedrig" und wartet, solange hohe Anfragen anstehen.
 """
 
 from __future__ import annotations
@@ -35,6 +38,8 @@ log = logging.getLogger(__name__)
 SESSION_COOKIE = "access_token_web"
 ANON_ID_HEADER = "X-Anon-Id"
 PER_PAGE = 20
+# Schutz vor riesigen Antworten (Artikelseite ~2 MB, Katalog ~40 KB)
+MAX_RESPONSE_BYTES = 8 * 1024 * 1024
 
 _LOCALES = {"at": "de-AT", "de": "de-DE"}
 
@@ -71,14 +76,21 @@ class VintedClient:
       raise MalformedResponseError(f"Katalog ohne items-Liste, Schlüssel: {list(data)[:10]}")
     return [item for item in items if isinstance(item, dict)]
 
-  async def fetch_user(self, domain: str, user_id: int) -> dict[str, Any]:
+  async def fetch_user(
+    self, domain: str, user_id: int, *, low_priority: bool = False
+  ) -> dict[str, Any]:
     """Öffentliches Verkäuferprofil (rohes Dict, enthält mehr als wir speichern!)."""
-    return await self._get_json(domain, "user", endpoints.user_url(domain, user_id), None)
+    url = endpoints.user_url(domain, user_id)
+    return await self._get_json(domain, "user", url, None, low_priority=low_priority)
 
-  async def fetch_item_page(self, domain: str, item_id: int) -> str:
+  async def fetch_item_page(self, domain: str, item_id: int, *, low_priority: bool = True) -> str:
     """Öffentliche Artikelseite als HTML (für alle Fotos und die Beschreibung)."""
     response = await self._send(
-      "item_page", endpoints.item_url(domain, item_id), None, self._page_headers(domain)
+      "item_page",
+      endpoints.item_url(domain, item_id),
+      None,
+      self._page_headers(domain),
+      low_priority=low_priority,
     )
     self._raise_for_status(response, f"Artikelseite {item_id}")
     return response.text
@@ -86,12 +98,37 @@ class VintedClient:
   # --- Interna -------------------------------------------------------------
 
   async def _send(
-    self, kind: str, url: str, params: dict[str, str] | None, headers: dict[str, str]
+    self,
+    kind: str,
+    url: str,
+    params: dict[str, str] | None,
+    headers: dict[str, str],
+    *,
+    low_priority: bool = False,
   ) -> httpx.Response:
-    """JEDER Request an Vinted läuft hier durch: Rate-Limiter, Netzwerkfehler, Statistik."""
-    await self._limiter.acquire()
+    """JEDER Request an Vinted läuft hier durch: Rate-Limiter, Größenlimit, Statistik."""
+    await self._limiter.acquire(low_priority=low_priority)
     try:
-      response = await self._http.get(url, params=params, headers=headers)
+      # Gestreamt lesen, damit eine (fehlerhafte) Riesen-Antwort nicht den Speicher füllt
+      async with self._http.stream("GET", url, params=params, headers=headers) as streamed:
+        body = bytearray()
+        async for chunk in streamed.aiter_bytes():
+          body += chunk
+          if len(body) > MAX_RESPONSE_BYTES:
+            self.stats.record(kind, "too_large")
+            raise MalformedResponseError(f"{kind}: Antwort größer als {MAX_RESPONSE_BYTES} Bytes")
+        # Fertige Antwort mit dem gelesenen Inhalt bauen (für .json(), .text, .cookies).
+        # aiter_bytes() liefert bereits ENTPACKTE Daten -> Content-Encoding/-Length entfernen,
+        # sonst würde httpx ein zweites Mal entpacken (DecodingError).
+        headers = httpx.Headers(streamed.headers)
+        for name in ("content-encoding", "content-length"):
+          headers.pop(name, None)
+        response = httpx.Response(
+          streamed.status_code,
+          headers=headers,
+          content=bytes(body),
+          request=streamed.request,
+        )
     except httpx.HTTPError as error:
       self.stats.record(kind, "network")
       raise VintedNetworkError(f"{kind}: {error!r}") from error
@@ -99,17 +136,23 @@ class VintedClient:
     return response
 
   async def _get_json(
-    self, domain: str, kind: str, url: str, params: dict[str, str] | None
+    self,
+    domain: str,
+    kind: str,
+    url: str,
+    params: dict[str, str] | None,
+    *,
+    low_priority: bool = False,
   ) -> dict[str, Any]:
     session = await self._session(domain)
     try:
-      return await self._request_json(domain, kind, url, params, session)
+      return await self._request_json(domain, kind, url, params, session, low_priority)
     except UnauthorizedError:
       # Token abgelaufen: Session verwerfen, genau EIN neuer Versuch
       log.info("vinted.%s: Session abgelaufen (401), hole neue", domain)
       self._sessions.pop(domain, None)
       session = await self._session(domain)
-      return await self._request_json(domain, kind, url, params, session)
+      return await self._request_json(domain, kind, url, params, session, low_priority)
 
   async def _session(self, domain: str) -> VintedSession:
     if domain in self._sessions:
@@ -135,6 +178,7 @@ class VintedClient:
     url: str,
     params: dict[str, str] | None,
     session: VintedSession,
+    low_priority: bool = False,
   ) -> dict[str, Any]:
     site = endpoints.site_root(domain).rstrip("/")
     locale = _LOCALES.get(domain, "de-AT")
@@ -151,7 +195,7 @@ class VintedClient:
     if session.anon_id:
       headers[ANON_ID_HEADER] = session.anon_id
 
-    response = await self._send(kind, url, params, headers)
+    response = await self._send(kind, url, params, headers, low_priority=low_priority)
     self._raise_for_status(response, url)
     try:
       data = response.json()

@@ -60,12 +60,24 @@ def format_stars(reputation: float | None, count: int | None) -> str | None:
   return f"{'★' * stars}{'☆' * (5 - stars)} ({count})"
 
 
+def safe_text(text: str | None) -> str | None:
+  """Text von Verkäufern entschärfen: Markdown (v. a. getarnte Links [x](url)) wird escaped.
+
+  Sonst könnte jemand in seine Beschreibung "[Hier kaufen](https://phishing…)" schreiben
+  und Discord würde daraus einen klickbaren Link machen.
+  """
+  if text is None:
+    return None
+  return discord.utils.escape_mentions(discord.utils.escape_markdown(text))
+
+
 def description_preview(text: str | None, limit: int = DESCRIPTION_PREVIEW) -> str | None:
   """Erste Zeichen der Beschreibung, Zeilenumbrüche zu Leerzeichen, als Discord-Zitat."""
   if not text:
     return None
   flat = re.sub(r"\s+", " ", text).strip()
-  return f"> {truncate(flat, limit)}" if flat else None
+  # Erst kürzen, dann escapen – sonst könnte die Kürzung ein Escape-Zeichen abschneiden
+  return f"> {safe_text(truncate(flat, limit))}" if flat else None
 
 
 def gallery_urls(primary: str | None, all_photos: tuple[str, ...]) -> list[str]:
@@ -104,13 +116,13 @@ def build_message(entry: OutboxEntry) -> tuple[list[discord.Embed], discord.ui.V
   if price_text and total and total != price:
     price_text += f"\n{total} inkl. Käuferschutz"
   _add_field(main, "⏱️ Gefunden", f"<t:{int(entry.first_seen_at.timestamp())}:R>")
-  _add_field(main, "📏 Größe", item.size)
-  _add_field(main, "🏷️ Marke", item.brand)
-  _add_field(main, "✨ Zustand", item.condition)
+  _add_field(main, "📏 Größe", safe_text(item.size))
+  _add_field(main, "🏷️ Marke", safe_text(item.brand))
+  _add_field(main, "✨ Zustand", safe_text(item.condition))
   _add_field(main, "⭐ Bewertung", rating or "noch keine")
   _add_field(main, "💶 Preis", price_text)
 
-  footer = f"{entry.filter_name} · vinted.{entry.domain}"
+  footer = f"{entry.filter_name} · vinted.{entry.domain}"  # Footer rendert kein Markdown
   if item.favourite_count:
     footer += f" · ❤️ {item.favourite_count}"
   main.set_footer(text=footer)

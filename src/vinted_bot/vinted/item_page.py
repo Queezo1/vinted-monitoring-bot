@@ -17,6 +17,8 @@ import json
 import re
 from dataclasses import dataclass
 
+from vinted_bot.vinted.models import https_url
+
 # Im HTML steht der Datenblock als JS-String, Anführungszeichen sind daher als \" escaped
 _PHOTOS_KEYS = ('\\"photos\\":[', '"photos":[')
 _ITEM_ID_LOOKBEHIND = 400  # so weit vor dem Array muss die item_id stehen
@@ -74,14 +76,12 @@ def _parse_json_array(page: str, open_bracket: int, escaped: bool) -> list | Non
 
 
 def _best_url(photo: dict) -> str | None:
-  url = photo.get("full_size_url") or photo.get("url")
-  if isinstance(url, str) and url.startswith("https://"):
+  url = https_url(photo.get("full_size_url")) or https_url(photo.get("url"))
+  if url:
     return url
   thumbnails = photo.get("thumbnails")
-  if isinstance(thumbnails, list) and thumbnails:
-    last = thumbnails[-1]
-    if isinstance(last, dict) and isinstance(last.get("url"), str):
-      return last["url"]
+  if isinstance(thumbnails, list) and thumbnails and isinstance(thumbnails[-1], dict):
+    return https_url(thumbnails[-1].get("url"))
   return None
 
 

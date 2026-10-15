@@ -24,12 +24,18 @@ class SellerResolver:
     self._client = client
     self._max_age = max_age
 
-  async def resolve(self, domain: str, user_id: int) -> SellerInfo | None:
+  async def cached(self, user_id: int) -> SellerInfo | None:
+    """Nur aus dem Cache – kostet keinen Request."""
+    return await self._repo.get_seller(user_id, self._max_age)
+
+  async def resolve(
+    self, domain: str, user_id: int, *, low_priority: bool = False
+  ) -> SellerInfo | None:
     """Aus dem Cache oder per Request. VintedError-Ausnahmen gehen an den Aufrufer."""
-    cached = await self._repo.get_seller(user_id, self._max_age)
+    cached = await self.cached(user_id)
     if cached is not None:
       return cached
-    raw = await self._client.fetch_user(domain, user_id)
+    raw = await self._client.fetch_user(domain, user_id, low_priority=low_priority)
     seller = parse_seller(raw)
     if seller is not None:
       await self._repo.save_seller(seller)

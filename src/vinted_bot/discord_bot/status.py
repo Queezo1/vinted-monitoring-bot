@@ -32,6 +32,8 @@ class StatusData:
   filters: list[FilterRow]
   blocks: dict[str, DomainBlock | None]  # Domain -> aktive Sperre oder None
   stats: StatsSummary
+  spacing_s: float  # aktueller Mindestabstand zwischen Vinted-Anfragen
+  intervals: dict[int, float]  # Filter-ID -> effektives Intervall
   pending: int
   posted_24h: int
   admin_channel_id: int | None
@@ -50,6 +52,7 @@ def build_status_embed(data: StatusData) -> discord.Embed:
 
   embed.add_field(name="Vinted", value=_domains_text(data.blocks), inline=False)
   embed.add_field(name="Anfragen (letzte Stunde)", value=_stats_text(data.stats), inline=False)
+  embed.add_field(name="Takt", value=_pace_text(data), inline=False)
 
   if data.filters:
     text = "\n\n".join(describe_filter(f) for f in data.filters)
@@ -84,6 +87,16 @@ def _stats_text(stats: StatsSummary) -> str:
   errors = {k: v for k, v in stats.by_outcome.items() if k != "200"}
   error_text = ", ".join(f"{k}: {v}" for k, v in sorted(errors.items())) if errors else "keine"
   return f"{stats.total} gesamt ({kinds})\nFehler: {error_text}"
+
+
+def _pace_text(data: StatusData) -> str:
+  per_minute = 60 / data.spacing_s if data.spacing_s else 0
+  lines = [f"Abstand zwischen Anfragen: {data.spacing_s:.1f} s (max. {per_minute:.0f}/min)"]
+  if data.intervals:
+    values = sorted(set(round(v) for v in data.intervals.values()))
+    shown = " / ".join(f"{v} s" for v in values)
+    lines.append(f"Effektives Intervall pro Filter: {shown}")
+  return "\n".join(lines)
 
 
 def _fit(text: str, limit: int) -> str:
