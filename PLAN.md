@@ -530,7 +530,11 @@ Ziel: ≥ 80 % Abdeckung in `vinted/` und `core/`. Discord-Klebecode wird manuel
 
 ---
 
-## 8. Deployment (24/7)
+## 8. Deployment
+
+> **Entscheidung vom 15.10.2026:** Kein 24/7-Betrieb. Der Bot läuft per **Autostart beim Windows-Login** auf deinem PC, weil du ohnehin nur am PC schaust und kein Handy nutzt. Umgesetzt sind Verknüpfung im Autostart-Ordner, `pythonw` ohne Fenster, Einzelinstanz-Sperre und Start-Wiederholung bei fehlendem Netz (siehe README). Nach einer Pause werden verpasste Artikel nachgeholt, bis zu 10 pro Filter. Die Pi-/VPS-Variante unten bleibt als Option für später.
+
+### 8b. Option: 24/7-Betrieb
 
 **Empfohlen: Raspberry Pi (oder vorhandener Linux-Rechner) zu Hause, venv + systemd.**
 

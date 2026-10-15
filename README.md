@@ -3,7 +3,7 @@
 Privater Discord-Bot, der Vinted-Filter überwacht und neue Artikel postet. Den Plan mit Recherche,
 Architektur und Meilensteinen findest du in [PLAN.md](PLAN.md).
 
-**Stand: M3.** Filter werden per Slash-Command in Discord verwaltet. Jeder Filter bekommt einen eigenen Kanal in der Kategorie „Vinted“. Posts zeigen bis zu 3 Fotos, eine Kurzbeschreibung, die Verkäufer-Flagge und die Bewertung.
+**Stand: M6.** Filter werden per Slash-Command in Discord verwaltet. Jeder Filter bekommt einen eigenen Kanal in der Kategorie „Vinted“. Posts zeigen bis zu 3 Fotos, eine Kurzbeschreibung, die Verkäufer-Flagge und die Bewertung.
 
 ## Slash-Commands (nur für dich sichtbar)
 
@@ -17,6 +17,20 @@ Architektur und Meilensteinen findest du in [PLAN.md](PLAN.md).
 | `/filter remove filter:<…> [kanal_loeschen]` | Filter löschen, optional samt Kanal |
 
 Beim Parameter `filter` schlägt Discord deine Filter automatisch vor. Bei einem neuen Filter merkt sich der Bot beim ersten Abruf nur den aktuellen Stand. Gepostet wird erst ab dem nächsten neuen Artikel.
+
+## Autostart beim Windows-Login (M6)
+
+Der Bot läuft, solange dein PC an ist. Er startet unsichtbar bei der Anmeldung und endet beim Herunterfahren. Nach dem Einschalten postet er verpasste Artikel nach, bis zu 10 pro Filter.
+
+| Zweck | Befehl (PowerShell im Projektordner) |
+|---|---|
+| Autostart einrichten und gleich starten | `powershell -ExecutionPolicy Bypass -File scripts\windows\install_autostart.ps1 -StartNow` |
+| Bot manuell starten | `powershell -ExecutionPolicy Bypass -File scripts\windows\start_bot.ps1` |
+| Bot beenden | `powershell -ExecutionPolicy Bypass -File scripts\windows\stop_bot.ps1` |
+| Autostart entfernen | `powershell -ExecutionPolicy Bypass -File scripts\windows\uninstall_autostart.ps1` |
+| Log ansehen | `Get-Content logs\bot.log -Tail 30 -Wait -Encoding utf8` |
+
+Der Bot läuft immer nur einmal. Ein zweiter Start beendet sich sofort, die Sperrdatei ist `data\bot.lock`. Ist das Netzwerk direkt nach dem Login noch nicht bereit, versucht er es nach 30 s erneut, bei weiteren Fehlschlägen mit steigenden Pausen bis 5 min. Mit `/status` in Discord siehst du jederzeit, ob er läuft.
 
 ## Einrichtung (Windows, PowerShell)
 
