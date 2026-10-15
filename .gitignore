@@ -1,0 +1,28 @@
+# Secrets – niemals committen
+.env
+
+# Laufzeitdaten
+data/
+logs/
+*.db
+*.db-wal
+*.db-shm
+
+# Probe-Rohdaten (enthalten ggf. personenbezogene Daten, nur anonymisierte Fixtures committen)
+probe-output/
+
+# Python
+.venv/
+__pycache__/
+*.py[cod]
+*.egg-info/
+.pytest_cache/
+.ruff_cache/
+.coverage
+htmlcov/
+
+# Editor/OS
+.vscode/
+.idea/
+Thumbs.db
+.DS_Store

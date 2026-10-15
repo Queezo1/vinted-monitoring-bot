@@ -1,0 +1,3176 @@
+{
+  "items": [
+    {
+      "content_source": "catalog",
+      "favourite_count": 0,
+      "id": 10383286812,
+      "is_favourite": false,
+      "item_box": {
+        "accessibility_label": "Pull vintage rouge col rond Polo Ralph Lauren taille 100 100 % coton logo bleu brodé 1992, Marke: Ralph Lauren, Zustand: Sehr gut, Größe: M, 35.00 €, 37.45 €",
+        "exposures": [],
+        "ff_exposures": [],
+        "first_line": "Ralph Lauren",
+        "item_id": 10383286812,
+        "second_line": "M · Sehr gut"
+      },
+      "photo": {
+        "dominant_color": "#B6071D",
+        "dominant_color_opaque": "#E9B5BB",
+        "extra": {},
+        "full_size_url": "https://images.example.invalid/item/1.jpg",
+        "height": 800,
+        "high_resolution": {
+          "id": "06_0109c_xZderdg3CT7EwBcURDYnWpWo",
+          "orientation": 0
+        },
+        "id": 1,
+        "image_no": 1,
+        "is_main": true,
+        "thumbnails": [
+          {
+            "height": 100,
+            "original_size": null,
+            "type": "thumb70x100",
+            "url": "https://images.example.invalid/item-thumb/1.jpg",
+            "width": 70
+          },
+          {
+            "height": 210,
+            "original_size": null,
+            "type": "thumb150x210",
+            "url": "https://images.example.invalid/item-thumb/1.jpg",
+            "width": 150
+          },
+          {
+            "height": 430,
+            "original_size": null,
+            "type": "thumb310x430",
+            "url": "https://images.example.invalid/item-thumb/1.jpg",
+            "width": 310
+          },
+          {
+            "height": 428,
+            "original_size": true,
+            "type": "thumb428x624",
+            "url": "https://images.example.invalid/item-thumb/1.jpg",
+            "width": 321
+          },
+          {
+            "height": 624,
+            "original_size": true,
+            "type": "thumb624x428",
+            "url": "https://images.example.invalid/item-thumb/1.jpg",
+            "width": 468
+          },
+          {
+            "height": 364,
+            "original_size": true,
+            "type": "thumb364x428",
+            "url": "https://images.example.invalid/item-thumb/1.jpg",
+            "width": 273
+          }
+        ],
+        "url": "https://images.example.invalid/item/1.jpg",
+        "width": 600
+      },
+      "photos": [
+        {
+          "dominant_color": "#B6071D",
+          "dominant_color_opaque": "#E9B5BB",
+          "extra": {},
+          "full_size_url": "https://images.example.invalid/item1/1.jpg",
+          "height": 800,
+          "high_resolution": {
+            "id": "06_0109c_xZderdg3CT7EwBcURDYnWpWo",
+            "orientation": 0
+          },
+          "id": 1,
+          "image_no": 1,
+          "is_main": true,
+          "thumbnails": [
+            {
+              "height": 100,
+              "original_size": null,
+              "type": "thumb70x100",
+              "url": "https://images.example.invalid/item1-thumb/1.jpg",
+              "width": 70
+            },
+            {
+              "height": 210,
+              "original_size": null,
+              "type": "thumb150x210",
+              "url": "https://images.example.invalid/item1-thumb/1.jpg",
+              "width": 150
+            },
+            {
+              "height": 430,
+              "original_size": null,
+              "type": "thumb310x430",
+              "url": "https://images.example.invalid/item1-thumb/1.jpg",
+              "width": 310
+            },
+            {
+              "height": 428,
+              "original_size": true,
+              "type": "thumb428x624",
+              "url": "https://images.example.invalid/item1-thumb/1.jpg",
+              "width": 321
+            },
+            {
+              "height": 624,
+              "original_size": true,
+              "type": "thumb624x428",
+              "url": "https://images.example.invalid/item1-thumb/1.jpg",
+              "width": 468
+            },
+            {
+              "height": 364,
+              "original_size": true,
+              "type": "thumb364x428",
+              "url": "https://images.example.invalid/item1-thumb/1.jpg",
+              "width": 273
+            }
+          ],
+          "url": "https://images.example.invalid/item1/1.jpg",
+          "width": 600
+        }
+      ],
+      "price": {
+        "amount": "35.00",
+        "currency_code": "EUR"
+      },
+      "promoted": false,
+      "service_fee": {
+        "amount": "2.45",
+        "currency_code": "EUR"
+      },
+      "show_1st_time_seller_discount": false,
+      "title": "Pull vintage rouge col rond Polo Ralph Lauren taille 100 100 % coton logo bleu brodé 1992",
+      "total_item_price": {
+        "amount": "37.45",
+        "currency_code": "EUR"
+      },
+      "url": "/items/10383286812-pull-vintage-rouge-col-rond-polo-ralph-lauren-taille-100-100-coton-logo-bleu-brode-1992",
+      "user": {
+        "business": true,
+        "id": 900001,
+        "login": "seller_1"
+      },
+      "view_count": 0
+    },
+    {
+      "content_source": "catalog",
+      "favourite_count": 0,
+      "id": 10383289373,
+      "is_favourite": false,
+      "item_box": {
+        "accessibility_label": "Polo Ralph Lauren Pullover, Marke: Polo Ralph Lauren, Zustand: Sehr gut, Größe: M, 35.00 €, 37.45 €",
+        "exposures": [],
+        "ff_exposures": [],
+        "first_line": "Polo Ralph Lauren",
+        "item_id": 10383289373,
+        "second_line": "M · Sehr gut"
+      },
+      "photo": {
+        "dominant_color": "#B3AB9C",
+        "dominant_color_opaque": "#E8E6E1",
+        "extra": {},
+        "full_size_url": "https://images.example.invalid/item/2.jpg",
+        "height": 800,
+        "high_resolution": {
+          "id": "01_00bdc_F4X3N7VT5qT3x7JuVEyS5NLq",
+          "orientation": null
+        },
+        "id": 1,
+        "image_no": 1,
+        "is_main": true,
+        "thumbnails": [
+          {
+            "height": 100,
+            "original_size": null,
+            "type": "thumb70x100",
+            "url": "https://images.example.invalid/item-thumb/2.jpg",
+            "width": 70
+          },
+          {
+            "height": 210,
+            "original_size": null,
+            "type": "thumb150x210",
+            "url": "https://images.example.invalid/item-thumb/2.jpg",
+            "width": 150
+          },
+          {
+            "height": 430,
+            "original_size": null,
+            "type": "thumb310x430",
+            "url": "https://images.example.invalid/item-thumb/2.jpg",
+            "width": 310
+          },
+          {
+            "height": 428,
+            "original_size": true,
+            "type": "thumb428x624",
+            "url": "https://images.example.invalid/item-thumb/2.jpg",
+            "width": 321
+          },
+          {
+            "height": 624,
+            "original_size": true,
+            "type": "thumb624x428",
+            "url": "https://images.example.invalid/item-thumb/2.jpg",
+            "width": 468
+          },
+          {
+            "height": 364,
+            "original_size": true,
+            "type": "thumb364x428",
+            "url": "https://images.example.invalid/item-thumb/2.jpg",
+            "width": 273
+          }
+        ],
+        "url": "https://images.example.invalid/item/2.jpg",
+        "width": 600
+      },
+      "photos": [
+        {
+          "dominant_color": "#B3AB9C",
+          "dominant_color_opaque": "#E8E6E1",
+          "extra": {},
+          "full_size_url": "https://images.example.invalid/item2/1.jpg",
+          "height": 800,
+          "high_resolution": {
+            "id": "01_00bdc_F4X3N7VT5qT3x7JuVEyS5NLq",
+            "orientation": null
+          },
+          "id": 1,
+          "image_no": 1,
+          "is_main": true,
+          "thumbnails": [
+            {
+              "height": 100,
+              "original_size": null,
+              "type": "thumb70x100",
+              "url": "https://images.example.invalid/item2-thumb/1.jpg",
+              "width": 70
+            },
+            {
+              "height": 210,
+              "original_size": null,
+              "type": "thumb150x210",
+              "url": "https://images.example.invalid/item2-thumb/1.jpg",
+              "width": 150
+            },
+            {
+              "height": 430,
+              "original_size": null,
+              "type": "thumb310x430",
+              "url": "https://images.example.invalid/item2-thumb/1.jpg",
+              "width": 310
+            },
+            {
+              "height": 428,
+              "original_size": true,
+              "type": "thumb428x624",
+              "url": "https://images.example.invalid/item2-thumb/1.jpg",
+              "width": 321
+            },
+            {
+              "height": 624,
+              "original_size": true,
+              "type": "thumb624x428",
+              "url": "https://images.example.invalid/item2-thumb/1.jpg",
+              "width": 468
+            },
+            {
+              "height": 364,
+              "original_size": true,
+              "type": "thumb364x428",
+              "url": "https://images.example.invalid/item2-thumb/1.jpg",
+              "width": 273
+            }
+          ],
+          "url": "https://images.example.invalid/item2/1.jpg",
+          "width": 600
+        }
+      ],
+      "price": {
+        "amount": "35.00",
+        "currency_code": "EUR"
+      },
+      "promoted": false,
+      "service_fee": {
+        "amount": "2.45",
+        "currency_code": "EUR"
+      },
+      "show_1st_time_seller_discount": false,
+      "title": "Polo Ralph Lauren Pullover",
+      "total_item_price": {
+        "amount": "37.45",
+        "currency_code": "EUR"
+      },
+      "url": "/items/10383289373-polo-ralph-lauren-pullover",
+      "user": {
+        "business": false,
+        "id": 900002,
+        "login": "seller_2"
+      },
+      "view_count": 0
+    },
+    {
+      "content_source": "catalog",
+      "favourite_count": 0,
+      "id": 10383280002,
+      "is_favourite": false,
+      "item_box": {
+        "accessibility_label": "Maglione Ralph Lauren Uomo S Blu Navy Collo Sciallato Logo Giallo 100% Cotone, Marke: Ralph Lauren, Zustand: Sehr gut, Größe: S, 37.90 €, 40.50 €",
+        "exposures": [],
+        "ff_exposures": [],
+        "first_line": "Ralph Lauren",
+        "item_id": 10383280002,
+        "second_line": "S · Sehr gut"
+      },
+      "photo": {
+        "dominant_color": "#171926",
+        "dominant_color_opaque": "#B9BABE",
+        "extra": {},
+        "full_size_url": "https://images.example.invalid/item/3.jpg",
+        "height": 800,
+        "high_resolution": {
+          "id": "05_01fe2_ZhaXEE3MKGQJBzH21SGo8FMM",
+          "orientation": null
+        },
+        "id": 1,
+        "image_no": 1,
+        "is_main": true,
+        "thumbnails": [
+          {
+            "height": 100,
+            "original_size": null,
+            "type": "thumb70x100",
+            "url": "https://images.example.invalid/item-thumb/3.jpg",
+            "width": 70
+          },
+          {
+            "height": 210,
+            "original_size": null,
+            "type": "thumb150x210",
+            "url": "https://images.example.invalid/item-thumb/3.jpg",
+            "width": 150
+          },
+          {
+            "height": 430,
+            "original_size": null,
+            "type": "thumb310x430",
+            "url": "https://images.example.invalid/item-thumb/3.jpg",
+            "width": 310
+          },
+          {
+            "height": 428,
+            "original_size": true,
+            "type": "thumb428x624",
+            "url": "https://images.example.invalid/item-thumb/3.jpg",
+            "width": 285
+          },
+          {
+            "height": 624,
+            "original_size": true,
+            "type": "thumb624x428",
+            "url": "https://images.example.invalid/item-thumb/3.jpg",
+            "width": 416
+          },
+          {
+            "height": 364,
+            "original_size": true,
+            "type": "thumb364x428",
+            "url": "https://images.example.invalid/item-thumb/3.jpg",
+            "width": 242
+          }
+        ],
+        "url": "https://images.example.invalid/item/3.jpg",
+        "width": 533
+      },
+      "photos": [
+        {
+          "dominant_color": "#171926",
+          "dominant_color_opaque": "#B9BABE",
+          "extra": {},
+          "full_size_url": "https://images.example.invalid/item3/1.jpg",
+          "height": 800,
+          "high_resolution": {
+            "id": "05_01fe2_ZhaXEE3MKGQJBzH21SGo8FMM",
+            "orientation": null
+          },
+          "id": 1,
+          "image_no": 1,
+          "is_main": true,
+          "thumbnails": [
+            {
+              "height": 100,
+              "original_size": null,
+              "type": "thumb70x100",
+              "url": "https://images.example.invalid/item3-thumb/1.jpg",
+              "width": 70
+            },
+            {
+              "height": 210,
+              "original_size": null,
+              "type": "thumb150x210",
+              "url": "https://images.example.invalid/item3-thumb/1.jpg",
+              "width": 150
+            },
+            {
+              "height": 430,
+              "original_size": null,
+              "type": "thumb310x430",
+              "url": "https://images.example.invalid/item3-thumb/1.jpg",
+              "width": 310
+            },
+            {
+              "height": 428,
+              "original_size": true,
+              "type": "thumb428x624",
+              "url": "https://images.example.invalid/item3-thumb/1.jpg",
+              "width": 285
+            },
+            {
+              "height": 624,
+              "original_size": true,
+              "type": "thumb624x428",
+              "url": "https://images.example.invalid/item3-thumb/1.jpg",
+              "width": 416
+            },
+            {
+              "height": 364,
+              "original_size": true,
+              "type": "thumb364x428",
+              "url": "https://images.example.invalid/item3-thumb/1.jpg",
+              "width": 242
+            }
+          ],
+          "url": "https://images.example.invalid/item3/1.jpg",
+          "width": 533
+        }
+      ],
+      "price": {
+        "amount": "37.90",
+        "currency_code": "EUR"
+      },
+      "promoted": false,
+      "service_fee": {
+        "amount": "2.60",
+        "currency_code": "EUR"
+      },
+      "show_1st_time_seller_discount": false,
+      "title": "Maglione Ralph Lauren Uomo S Blu Navy Collo Sciallato Logo Giallo 100% Cotone",
+      "total_item_price": {
+        "amount": "40.50",
+        "currency_code": "EUR"
+      },
+      "url": "/items/10383280002-maglione-ralph-lauren-uomo-s-blu-navy-collo-sciallato-logo-giallo-100-cotone",
+      "user": {
+        "business": false,
+        "id": 900003,
+        "login": "seller_3"
+      },
+      "view_count": 0
+    },
+    {
+      "content_source": "catalog",
+      "favourite_count": 0,
+      "id": 10383268964,
+      "is_favourite": false,
+      "item_box": {
+        "accessibility_label": "Pull rose pâle col rond logo poney vert L Polo Ralph Lauren maille 100% Pima Cotton, Marke: Ralph Lauren, Zustand: Sehr gut, Größe: L, 27.00 €, 29.05 €",
+        "exposures": [],
+        "ff_exposures": [],
+        "first_line": "Ralph Lauren",
+        "item_id": 10383268964,
+        "second_line": "L · Sehr gut"
+      },
+      "photo": {
+        "dominant_color": "#D2C5B7",
+        "dominant_color_opaque": "#F2EEE9",
+        "extra": {},
+        "full_size_url": "https://images.example.invalid/item/4.jpg",
+        "height": 800,
+        "high_resolution": {
+          "id": "06_0245c_FZqviU9AWb1KKbFq4hiKQaTv",
+          "orientation": 0
+        },
+        "id": 1,
+        "image_no": 1,
+        "is_main": true,
+        "thumbnails": [
+          {
+            "height": 100,
+            "original_size": null,
+            "type": "thumb70x100",
+            "url": "https://images.example.invalid/item-thumb/4.jpg",
+            "width": 70
+          },
+          {
+            "height": 210,
+            "original_size": null,
+            "type": "thumb150x210",
+            "url": "https://images.example.invalid/item-thumb/4.jpg",
+            "width": 150
+          },
+          {
+            "height": 430,
+            "original_size": null,
+            "type": "thumb310x430",
+            "url": "https://images.example.invalid/item-thumb/4.jpg",
+            "width": 310
+          },
+          {
+            "height": 428,
+            "original_size": true,
+            "type": "thumb428x624",
+            "url": "https://images.example.invalid/item-thumb/4.jpg",
+            "width": 321
+          },
+          {
+            "height": 624,
+            "original_size": true,
+            "type": "thumb624x428",
+            "url": "https://images.example.invalid/item-thumb/4.jpg",
+            "width": 468
+          },
+          {
+            "height": 364,
+            "original_size": true,
+            "type": "thumb364x428",
+            "url": "https://images.example.invalid/item-thumb/4.jpg",
+            "width": 273
+          }
+        ],
+        "url": "https://images.example.invalid/item/4.jpg",
+        "width": 600
+      },
+      "photos": [
+        {
+          "dominant_color": "#D2C5B7",
+          "dominant_color_opaque": "#F2EEE9",
+          "extra": {},
+          "full_size_url": "https://images.example.invalid/item4/1.jpg",
+          "height": 800,
+          "high_resolution": {
+            "id": "06_0245c_FZqviU9AWb1KKbFq4hiKQaTv",
+            "orientation": 0
+          },
+          "id": 1,
+          "image_no": 1,
+          "is_main": true,
+          "thumbnails": [
+            {
+              "height": 100,
+              "original_size": null,
+              "type": "thumb70x100",
+              "url": "https://images.example.invalid/item4-thumb/1.jpg",
+              "width": 70
+            },
+            {
+              "height": 210,
+              "original_size": null,
+              "type": "thumb150x210",
+              "url": "https://images.example.invalid/item4-thumb/1.jpg",
+              "width": 150
+            },
+            {
+              "height": 430,
+              "original_size": null,
+              "type": "thumb310x430",
+              "url": "https://images.example.invalid/item4-thumb/1.jpg",
+              "width": 310
+            },
+            {
+              "height": 428,
+              "original_size": true,
+              "type": "thumb428x624",
+              "url": "https://images.example.invalid/item4-thumb/1.jpg",
+              "width": 321
+            },
+            {
+              "height": 624,
+              "original_size": true,
+              "type": "thumb624x428",
+              "url": "https://images.example.invalid/item4-thumb/1.jpg",
+              "width": 468
+            },
+            {
+              "height": 364,
+              "original_size": true,
+              "type": "thumb364x428",
+              "url": "https://images.example.invalid/item4-thumb/1.jpg",
+              "width": 273
+            }
+          ],
+          "url": "https://images.example.invalid/item4/1.jpg",
+          "width": 600
+        }
+      ],
+      "price": {
+        "amount": "27.00",
+        "currency_code": "EUR"
+      },
+      "promoted": false,
+      "service_fee": {
+        "amount": "2.05",
+        "currency_code": "EUR"
+      },
+      "show_1st_time_seller_discount": false,
+      "title": "Pull rose pâle col rond logo poney vert L Polo Ralph Lauren maille 100% Pima Cotton",
+      "total_item_price": {
+        "amount": "29.05",
+        "currency_code": "EUR"
+      },
+      "url": "/items/10383268964-pull-rose-pale-col-rond-logo-poney-vert-l-polo-ralph-lauren-maille-100-pima-cotton",
+      "user": {
+        "business": true,
+        "id": 900001,
+        "login": "seller_1"
+      },
+      "view_count": 0
+    },
+    {
+      "content_source": "catalog",
+      "favourite_count": 0,
+      "id": 10383266883,
+      "is_favourite": false,
+      "item_box": {
+        "accessibility_label": "Pull en laine Ralph Lauren, Marke: Polo Ralph Lauren, Zustand: Sehr gut, Größe: L, 30.00 €, 32.20 €",
+        "exposures": [],
+        "ff_exposures": [],
+        "first_line": "Polo Ralph Lauren",
+        "item_id": 10383266883,
+        "second_line": "L · Sehr gut"
+      },
+      "photo": {
+        "dominant_color": "#514339",
+        "dominant_color_opaque": "#CBC7C4",
+        "extra": {},
+        "full_size_url": "https://images.example.invalid/item/5.jpg",
+        "height": 800,
+        "high_resolution": {
+          "id": "02_02298_a77CAfCjbc9kZis6vDArqkS1",
+          "orientation": null
+        },
+        "id": 1,
+        "image_no": 1,
+        "is_main": true,
+        "thumbnails": [
+          {
+            "height": 100,
+            "original_size": null,
+            "type": "thumb70x100",
+            "url": "https://images.example.invalid/item-thumb/5.jpg",
+            "width": 70
+          },
+          {
+            "height": 210,
+            "original_size": null,
+            "type": "thumb150x210",
+            "url": "https://images.example.invalid/item-thumb/5.jpg",
+            "width": 150
+          },
+          {
+            "height": 430,
+            "original_size": null,
+            "type": "thumb310x430",
+            "url": "https://images.example.invalid/item-thumb/5.jpg",
+            "width": 310
+          },
+          {
+            "height": 428,
+            "original_size": true,
+            "type": "thumb428x624",
+            "url": "https://images.example.invalid/item-thumb/5.jpg",
+            "width": 321
+          },
+          {
+            "height": 624,
+            "original_size": true,
+            "type": "thumb624x428",
+            "url": "https://images.example.invalid/item-thumb/5.jpg",
+            "width": 468
+          },
+          {
+            "height": 364,
+            "original_size": true,
+            "type": "thumb364x428",
+            "url": "https://images.example.invalid/item-thumb/5.jpg",
+            "width": 273
+          }
+        ],
+        "url": "https://images.example.invalid/item/5.jpg",
+        "width": 600
+      },
+      "photos": [
+        {
+          "dominant_color": "#514339",
+          "dominant_color_opaque": "#CBC7C4",
+          "extra": {},
+          "full_size_url": "https://images.example.invalid/item5/1.jpg",
+          "height": 800,
+          "high_resolution": {
+            "id": "02_02298_a77CAfCjbc9kZis6vDArqkS1",
+            "orientation": null
+          },
+          "id": 1,
+          "image_no": 1,
+          "is_main": true,
+          "thumbnails": [
+            {
+              "height": 100,
+              "original_size": null,
+              "type": "thumb70x100",
+              "url": "https://images.example.invalid/item5-thumb/1.jpg",
+              "width": 70
+            },
+            {
+              "height": 210,
+              "original_size": null,
+              "type": "thumb150x210",
+              "url": "https://images.example.invalid/item5-thumb/1.jpg",
+              "width": 150
+            },
+            {
+              "height": 430,
+              "original_size": null,
+              "type": "thumb310x430",
+              "url": "https://images.example.invalid/item5-thumb/1.jpg",
+              "width": 310
+            },
+            {
+              "height": 428,
+              "original_size": true,
+              "type": "thumb428x624",
+              "url": "https://images.example.invalid/item5-thumb/1.jpg",
+              "width": 321
+            },
+            {
+              "height": 624,
+              "original_size": true,
+              "type": "thumb624x428",
+              "url": "https://images.example.invalid/item5-thumb/1.jpg",
+              "width": 468
+            },
+            {
+              "height": 364,
+              "original_size": true,
+              "type": "thumb364x428",
+              "url": "https://images.example.invalid/item5-thumb/1.jpg",
+              "width": 273
+            }
+          ],
+          "url": "https://images.example.invalid/item5/1.jpg",
+          "width": 600
+        }
+      ],
+      "price": {
+        "amount": "30.00",
+        "currency_code": "EUR"
+      },
+      "promoted": false,
+      "service_fee": {
+        "amount": "2.20",
+        "currency_code": "EUR"
+      },
+      "show_1st_time_seller_discount": false,
+      "title": "Pull en laine Ralph Lauren",
+      "total_item_price": {
+        "amount": "32.20",
+        "currency_code": "EUR"
+      },
+      "url": "/items/10383266883-pull-en-laine-ralph-lauren",
+      "user": {
+        "business": false,
+        "id": 900004,
+        "login": "seller_4"
+      },
+      "view_count": 0
+    },
+    {
+      "content_source": "catalog",
+      "favourite_count": 0,
+      "id": 10372409034,
+      "is_favourite": false,
+      "item_box": {
+        "accessibility_label": "Ralph Lauren Pullover, Marke: Polo Ralph Lauren, Zustand: Sehr gut, Größe: L, 15.00 €, 16.45 €",
+        "exposures": [],
+        "ff_exposures": [],
+        "first_line": "Polo Ralph Lauren",
+        "item_id": 10372409034,
+        "second_line": "L · Sehr gut"
+      },
+      "photo": {
+        "dominant_color": "#262E54",
+        "dominant_color_opaque": "#BEC0CC",
+        "extra": {},
+        "full_size_url": "https://images.example.invalid/item/6.jpg",
+        "height": 800,
+        "high_resolution": {
+          "id": "05_00be0_nHrudUaSBSLfa8oKDxRVnuVm",
+          "orientation": null
+        },
+        "id": 1,
+        "image_no": 1,
+        "is_main": true,
+        "thumbnails": [
+          {
+            "height": 100,
+            "original_size": null,
+            "type": "thumb70x100",
+            "url": "https://images.example.invalid/item-thumb/6.jpg",
+            "width": 70
+          },
+          {
+            "height": 210,
+            "original_size": null,
+            "type": "thumb150x210",
+            "url": "https://images.example.invalid/item-thumb/6.jpg",
+            "width": 150
+          },
+          {
+            "height": 430,
+            "original_size": null,
+            "type": "thumb310x430",
+            "url": "https://images.example.invalid/item-thumb/6.jpg",
+            "width": 310
+          },
+          {
+            "height": 428,
+            "original_size": true,
+            "type": "thumb428x624",
+            "url": "https://images.example.invalid/item-thumb/6.jpg",
+            "width": 321
+          },
+          {
+            "height": 624,
+            "original_size": true,
+            "type": "thumb624x428",
+            "url": "https://images.example.invalid/item-thumb/6.jpg",
+            "width": 468
+          },
+          {
+            "height": 364,
+            "original_size": true,
+            "type": "thumb364x428",
+            "url": "https://images.example.invalid/item-thumb/6.jpg",
+            "width": 273
+          }
+        ],
+        "url": "https://images.example.invalid/item/6.jpg",
+        "width": 600
+      },
+      "photos": [
+        {
+          "dominant_color": "#262E54",
+          "dominant_color_opaque": "#BEC0CC",
+          "extra": {},
+          "full_size_url": "https://images.example.invalid/item6/1.jpg",
+          "height": 800,
+          "high_resolution": {
+            "id": "05_00be0_nHrudUaSBSLfa8oKDxRVnuVm",
+            "orientation": null
+          },
+          "id": 1,
+          "image_no": 1,
+          "is_main": true,
+          "thumbnails": [
+            {
+              "height": 100,
+              "original_size": null,
+              "type": "thumb70x100",
+              "url": "https://images.example.invalid/item6-thumb/1.jpg",
+              "width": 70
+            },
+            {
+              "height": 210,
+              "original_size": null,
+              "type": "thumb150x210",
+              "url": "https://images.example.invalid/item6-thumb/1.jpg",
+              "width": 150
+            },
+            {
+              "height": 430,
+              "original_size": null,
+              "type": "thumb310x430",
+              "url": "https://images.example.invalid/item6-thumb/1.jpg",
+              "width": 310
+            },
+            {
+              "height": 428,
+              "original_size": true,
+              "type": "thumb428x624",
+              "url": "https://images.example.invalid/item6-thumb/1.jpg",
+              "width": 321
+            },
+            {
+              "height": 624,
+              "original_size": true,
+              "type": "thumb624x428",
+              "url": "https://images.example.invalid/item6-thumb/1.jpg",
+              "width": 468
+            },
+            {
+              "height": 364,
+              "original_size": true,
+              "type": "thumb364x428",
+              "url": "https://images.example.invalid/item6-thumb/1.jpg",
+              "width": 273
+            }
+          ],
+          "url": "https://images.example.invalid/item6/1.jpg",
+          "width": 600
+        }
+      ],
+      "price": {
+        "amount": "15.00",
+        "currency_code": "EUR"
+      },
+      "promoted": false,
+      "service_fee": {
+        "amount": "1.45",
+        "currency_code": "EUR"
+      },
+      "show_1st_time_seller_discount": false,
+      "title": "Ralph Lauren Pullover",
+      "total_item_price": {
+        "amount": "16.45",
+        "currency_code": "EUR"
+      },
+      "url": "/items/10372409034-ralph-lauren-pullover",
+      "user": {
+        "business": false,
+        "id": 900005,
+        "login": "seller_5"
+      },
+      "view_count": 0
+    },
+    {
+      "content_source": "catalog",
+      "favourite_count": 0,
+      "id": 10383261980,
+      "is_favourite": false,
+      "item_box": {
+        "accessibility_label": "Felpa polo ralph lauren, Marke: Polo Ralph Lauren, Zustand: Neu, Größe: M, 30.00 €, 32.20 €",
+        "exposures": [],
+        "ff_exposures": [],
+        "first_line": "Polo Ralph Lauren",
+        "item_id": 10383261980,
+        "second_line": "M · Neu"
+      },
+      "photo": {
+        "dominant_color": "#9C0D0E",
+        "dominant_color_opaque": "#E1B6B7",
+        "extra": {},
+        "full_size_url": "https://images.example.invalid/item/7.jpg",
+        "height": 800,
+        "high_resolution": {
+          "id": "01_01f73_JxQA8G46jKaHVUPeXBdXPKSF",
+          "orientation": null
+        },
+        "id": 1,
+        "image_no": 1,
+        "is_main": true,
+        "thumbnails": [
+          {
+            "height": 100,
+            "original_size": null,
+            "type": "thumb70x100",
+            "url": "https://images.example.invalid/item-thumb/7.jpg",
+            "width": 70
+          },
+          {
+            "height": 210,
+            "original_size": null,
+            "type": "thumb150x210",
+            "url": "https://images.example.invalid/item-thumb/7.jpg",
+            "width": 150
+          },
+          {
+            "height": 430,
+            "original_size": null,
+            "type": "thumb310x430",
+            "url": "https://images.example.invalid/item-thumb/7.jpg",
+            "width": 310
+          },
+          {
+            "height": 428,
+            "original_size": true,
+            "type": "thumb428x624",
+            "url": "https://images.example.invalid/item-thumb/7.jpg",
+            "width": 321
+          },
+          {
+            "height": 624,
+            "original_size": true,
+            "type": "thumb624x428",
+            "url": "https://images.example.invalid/item-thumb/7.jpg",
+            "width": 468
+          },
+          {
+            "height": 364,
+            "original_size": true,
+            "type": "thumb364x428",
+            "url": "https://images.example.invalid/item-thumb/7.jpg",
+            "width": 273
+          }
+        ],
+        "url": "https://images.example.invalid/item/7.jpg",
+        "width": 600
+      },
+      "photos": [
+        {
+          "dominant_color": "#9C0D0E",
+          "dominant_color_opaque": "#E1B6B7",
+          "extra": {},
+          "full_size_url": "https://images.example.invalid/item7/1.jpg",
+          "height": 800,
+          "high_resolution": {
+            "id": "01_01f73_JxQA8G46jKaHVUPeXBdXPKSF",
+            "orientation": null
+          },
+          "id": 1,
+          "image_no": 1,
+          "is_main": true,
+          "thumbnails": [
+            {
+              "height": 100,
+              "original_size": null,
+              "type": "thumb70x100",
+              "url": "https://images.example.invalid/item7-thumb/1.jpg",
+              "width": 70
+            },
+            {
+              "height": 210,
+              "original_size": null,
+              "type": "thumb150x210",
+              "url": "https://images.example.invalid/item7-thumb/1.jpg",
+              "width": 150
+            },
+            {
+              "height": 430,
+              "original_size": null,
+              "type": "thumb310x430",
+              "url": "https://images.example.invalid/item7-thumb/1.jpg",
+              "width": 310
+            },
+            {
+              "height": 428,
+              "original_size": true,
+              "type": "thumb428x624",
+              "url": "https://images.example.invalid/item7-thumb/1.jpg",
+              "width": 321
+            },
+            {
+              "height": 624,
+              "original_size": true,
+              "type": "thumb624x428",
+              "url": "https://images.example.invalid/item7-thumb/1.jpg",
+              "width": 468
+            },
+            {
+              "height": 364,
+              "original_size": true,
+              "type": "thumb364x428",
+              "url": "https://images.example.invalid/item7-thumb/1.jpg",
+              "width": 273
+            }
+          ],
+          "url": "https://images.example.invalid/item7/1.jpg",
+          "width": 600
+        }
+      ],
+      "price": {
+        "amount": "30.00",
+        "currency_code": "EUR"
+      },
+      "promoted": false,
+      "service_fee": {
+        "amount": "2.20",
+        "currency_code": "EUR"
+      },
+      "show_1st_time_seller_discount": false,
+      "title": "Felpa polo ralph lauren",
+      "total_item_price": {
+        "amount": "32.20",
+        "currency_code": "EUR"
+      },
+      "url": "/items/10383261980-felpa-polo-ralph-lauren",
+      "user": {
+        "business": false,
+        "id": 900006,
+        "login": "seller_6"
+      },
+      "view_count": 0
+    },
+    {
+      "content_source": "catalog",
+      "favourite_count": 6,
+      "id": 10383261843,
+      "is_favourite": false,
+      "item_box": {
+        "accessibility_label": "Polaire verte Ralph Lauren, Marke: Polo Ralph Lauren, Zustand: Sehr gut, Größe: M, 20.00 €, 21.70 €",
+        "exposures": [],
+        "ff_exposures": [],
+        "first_line": "Polo Ralph Lauren",
+        "item_id": 10383261843,
+        "second_line": "M · Sehr gut"
+      },
+      "photo": {
+        "dominant_color": "#303E38",
+        "dominant_color_opaque": "#C1C5C3",
+        "extra": {},
+        "full_size_url": "https://images.example.invalid/item/8.jpg",
+        "height": 800,
+        "high_resolution": {
+          "id": "06_00b5c_CfRnS7eZ9kAh1Qw5eMCHec8W",
+          "orientation": null
+        },
+        "id": 1,
+        "image_no": 1,
+        "is_main": true,
+        "thumbnails": [
+          {
+            "height": 100,
+            "original_size": null,
+            "type": "thumb70x100",
+            "url": "https://images.example.invalid/item-thumb/8.jpg",
+            "width": 70
+          },
+          {
+            "height": 210,
+            "original_size": null,
+            "type": "thumb150x210",
+            "url": "https://images.example.invalid/item-thumb/8.jpg",
+            "width": 150
+          },
+          {
+            "height": 430,
+            "original_size": null,
+            "type": "thumb310x430",
+            "url": "https://images.example.invalid/item-thumb/8.jpg",
+            "width": 310
+          },
+          {
+            "height": 428,
+            "original_size": true,
+            "type": "thumb428x624",
+            "url": "https://images.example.invalid/item-thumb/8.jpg",
+            "width": 321
+          },
+          {
+            "height": 624,
+            "original_size": true,
+            "type": "thumb624x428",
+            "url": "https://images.example.invalid/item-thumb/8.jpg",
+            "width": 468
+          },
+          {
+            "height": 364,
+            "original_size": true,
+            "type": "thumb364x428",
+            "url": "https://images.example.invalid/item-thumb/8.jpg",
+            "width": 273
+          }
+        ],
+        "url": "https://images.example.invalid/item/8.jpg",
+        "width": 600
+      },
+      "photos": [
+        {
+          "dominant_color": "#303E38",
+          "dominant_color_opaque": "#C1C5C3",
+          "extra": {},
+          "full_size_url": "https://images.example.invalid/item8/1.jpg",
+          "height": 800,
+          "high_resolution": {
+            "id": "06_00b5c_CfRnS7eZ9kAh1Qw5eMCHec8W",
+            "orientation": null
+          },
+          "id": 1,
+          "image_no": 1,
+          "is_main": true,
+          "thumbnails": [
+            {
+              "height": 100,
+              "original_size": null,
+              "type": "thumb70x100",
+              "url": "https://images.example.invalid/item8-thumb/1.jpg",
+              "width": 70
+            },
+            {
+              "height": 210,
+              "original_size": null,
+              "type": "thumb150x210",
+              "url": "https://images.example.invalid/item8-thumb/1.jpg",
+              "width": 150
+            },
+            {
+              "height": 430,
+              "original_size": null,
+              "type": "thumb310x430",
+              "url": "https://images.example.invalid/item8-thumb/1.jpg",
+              "width": 310
+            },
+            {
+              "height": 428,
+              "original_size": true,
+              "type": "thumb428x624",
+              "url": "https://images.example.invalid/item8-thumb/1.jpg",
+              "width": 321
+            },
+            {
+              "height": 624,
+              "original_size": true,
+              "type": "thumb624x428",
+              "url": "https://images.example.invalid/item8-thumb/1.jpg",
+              "width": 468
+            },
+            {
+              "height": 364,
+              "original_size": true,
+              "type": "thumb364x428",
+              "url": "https://images.example.invalid/item8-thumb/1.jpg",
+              "width": 273
+            }
+          ],
+          "url": "https://images.example.invalid/item8/1.jpg",
+          "width": 600
+        }
+      ],
+      "price": {
+        "amount": "20.00",
+        "currency_code": "EUR"
+      },
+      "promoted": false,
+      "service_fee": {
+        "amount": "1.70",
+        "currency_code": "EUR"
+      },
+      "show_1st_time_seller_discount": false,
+      "title": "Polaire verte Ralph Lauren",
+      "total_item_price": {
+        "amount": "21.70",
+        "currency_code": "EUR"
+      },
+      "url": "/items/10383261843-polaire-verte-ralph-lauren",
+      "user": {
+        "business": false,
+        "id": 900007,
+        "login": "seller_7"
+      },
+      "view_count": 0
+    },
+    {
+      "content_source": "catalog",
+      "favourite_count": 0,
+      "id": 10383253358,
+      "is_favourite": false,
+      "item_box": {
+        "accessibility_label": "Pull col V  Ralph Lauren Noir  M Homme Coton   M  #4678, Marke: Ralph Lauren, Zustand: Sehr gut, Größe: M, 25.00 €, 26.95 €",
+        "exposures": [],
+        "ff_exposures": [],
+        "first_line": "Ralph Lauren",
+        "item_id": 10383253358,
+        "second_line": "M · Sehr gut"
+      },
+      "photo": {
+        "dominant_color": "#262626",
+        "dominant_color_opaque": "#BEBEBE",
+        "extra": {},
+        "full_size_url": "https://images.example.invalid/item/9.jpg",
+        "height": 800,
+        "high_resolution": {
+          "id": "06_001f7_7kxmVDEjAUByH5iNCVr4kz1C",
+          "orientation": 0
+        },
+        "id": 1,
+        "image_no": 1,
+        "is_main": true,
+        "thumbnails": [
+          {
+            "height": 100,
+            "original_size": null,
+            "type": "thumb70x100",
+            "url": "https://images.example.invalid/item-thumb/9.jpg",
+            "width": 70
+          },
+          {
+            "height": 210,
+            "original_size": null,
+            "type": "thumb150x210",
+            "url": "https://images.example.invalid/item-thumb/9.jpg",
+            "width": 150
+          },
+          {
+            "height": 430,
+            "original_size": null,
+            "type": "thumb310x430",
+            "url": "https://images.example.invalid/item-thumb/9.jpg",
+            "width": 310
+          },
+          {
+            "height": 428,
+            "original_size": true,
+            "type": "thumb428x624",
+            "url": "https://images.example.invalid/item-thumb/9.jpg",
+            "width": 321
+          },
+          {
+            "height": 624,
+            "original_size": true,
+            "type": "thumb624x428",
+            "url": "https://images.example.invalid/item-thumb/9.jpg",
+            "width": 468
+          },
+          {
+            "height": 364,
+            "original_size": true,
+            "type": "thumb364x428",
+            "url": "https://images.example.invalid/item-thumb/9.jpg",
+            "width": 273
+          }
+        ],
+        "url": "https://images.example.invalid/item/9.jpg",
+        "width": 600
+      },
+      "photos": [
+        {
+          "dominant_color": "#262626",
+          "dominant_color_opaque": "#BEBEBE",
+          "extra": {},
+          "full_size_url": "https://images.example.invalid/item9/1.jpg",
+          "height": 800,
+          "high_resolution": {
+            "id": "06_001f7_7kxmVDEjAUByH5iNCVr4kz1C",
+            "orientation": 0
+          },
+          "id": 1,
+          "image_no": 1,
+          "is_main": true,
+          "thumbnails": [
+            {
+              "height": 100,
+              "original_size": null,
+              "type": "thumb70x100",
+              "url": "https://images.example.invalid/item9-thumb/1.jpg",
+              "width": 70
+            },
+            {
+              "height": 210,
+              "original_size": null,
+              "type": "thumb150x210",
+              "url": "https://images.example.invalid/item9-thumb/1.jpg",
+              "width": 150
+            },
+            {
+              "height": 430,
+              "original_size": null,
+              "type": "thumb310x430",
+              "url": "https://images.example.invalid/item9-thumb/1.jpg",
+              "width": 310
+            },
+            {
+              "height": 428,
+              "original_size": true,
+              "type": "thumb428x624",
+              "url": "https://images.example.invalid/item9-thumb/1.jpg",
+              "width": 321
+            },
+            {
+              "height": 624,
+              "original_size": true,
+              "type": "thumb624x428",
+              "url": "https://images.example.invalid/item9-thumb/1.jpg",
+              "width": 468
+            },
+            {
+              "height": 364,
+              "original_size": true,
+              "type": "thumb364x428",
+              "url": "https://images.example.invalid/item9-thumb/1.jpg",
+              "width": 273
+            }
+          ],
+          "url": "https://images.example.invalid/item9/1.jpg",
+          "width": 600
+        }
+      ],
+      "price": {
+        "amount": "25.00",
+        "currency_code": "EUR"
+      },
+      "promoted": false,
+      "service_fee": {
+        "amount": "1.95",
+        "currency_code": "EUR"
+      },
+      "show_1st_time_seller_discount": false,
+      "title": "Pull col V  Ralph Lauren Noir  M Homme Coton   M  #4678",
+      "total_item_price": {
+        "amount": "26.95",
+        "currency_code": "EUR"
+      },
+      "url": "/items/10383253358-pull-col-v-ralph-lauren-noir-m-homme-coton-m-4678",
+      "user": {
+        "business": true,
+        "id": 900008,
+        "login": "seller_8"
+      },
+      "view_count": 0
+    },
+    {
+      "content_source": "catalog",
+      "favourite_count": 0,
+      "id": 10383239619,
+      "is_favourite": false,
+      "item_box": {
+        "accessibility_label": "Sweat Ralph Lauren, Marke: Ralph Lauren, Zustand: Gut, Größe: M, 30.00 €, 32.20 €",
+        "exposures": [],
+        "ff_exposures": [],
+        "first_line": "Ralph Lauren",
+        "item_id": 10383239619,
+        "second_line": "M · Gut"
+      },
+      "photo": {
+        "dominant_color": "#2F353D",
+        "dominant_color_opaque": "#C1C2C5",
+        "extra": {},
+        "full_size_url": "https://images.example.invalid/item/10.jpg",
+        "height": 800,
+        "high_resolution": {
+          "id": "05_01a21_7kx1KW6cdKrQ5AzbPNY161et",
+          "orientation": null
+        },
+        "id": 1,
+        "image_no": 1,
+        "is_main": true,
+        "thumbnails": [
+          {
+            "height": 100,
+            "original_size": null,
+            "type": "thumb70x100",
+            "url": "https://images.example.invalid/item-thumb/10.jpg",
+            "width": 70
+          },
+          {
+            "height": 210,
+            "original_size": null,
+            "type": "thumb150x210",
+            "url": "https://images.example.invalid/item-thumb/10.jpg",
+            "width": 150
+          },
+          {
+            "height": 430,
+            "original_size": null,
+            "type": "thumb310x430",
+            "url": "https://images.example.invalid/item-thumb/10.jpg",
+            "width": 310
+          },
+          {
+            "height": 428,
+            "original_size": true,
+            "type": "thumb428x624",
+            "url": "https://images.example.invalid/item-thumb/10.jpg",
+            "width": 240
+          },
+          {
+            "height": 624,
+            "original_size": true,
+            "type": "thumb624x428",
+            "url": "https://images.example.invalid/item-thumb/10.jpg",
+            "width": 351
+          },
+          {
+            "height": 364,
+            "original_size": true,
+            "type": "thumb364x428",
+            "url": "https://images.example.invalid/item-thumb/10.jpg",
+            "width": 204
+          }
+        ],
+        "url": "https://images.example.invalid/item/10.jpg",
+        "width": 450
+      },
+      "photos": [
+        {
+          "dominant_color": "#2F353D",
+          "dominant_color_opaque": "#C1C2C5",
+          "extra": {},
+          "full_size_url": "https://images.example.invalid/item10/1.jpg",
+          "height": 800,
+          "high_resolution": {
+            "id": "05_01a21_7kx1KW6cdKrQ5AzbPNY161et",
+            "orientation": null
+          },
+          "id": 1,
+          "image_no": 1,
+          "is_main": true,
+          "thumbnails": [
+            {
+              "height": 100,
+              "original_size": null,
+              "type": "thumb70x100",
+              "url": "https://images.example.invalid/item10-thumb/1.jpg",
+              "width": 70
+            },
+            {
+              "height": 210,
+              "original_size": null,
+              "type": "thumb150x210",
+              "url": "https://images.example.invalid/item10-thumb/1.jpg",
+              "width": 150
+            },
+            {
+              "height": 430,
+              "original_size": null,
+              "type": "thumb310x430",
+              "url": "https://images.example.invalid/item10-thumb/1.jpg",
+              "width": 310
+            },
+            {
+              "height": 428,
+              "original_size": true,
+              "type": "thumb428x624",
+              "url": "https://images.example.invalid/item10-thumb/1.jpg",
+              "width": 240
+            },
+            {
+              "height": 624,
+              "original_size": true,
+              "type": "thumb624x428",
+              "url": "https://images.example.invalid/item10-thumb/1.jpg",
+              "width": 351
+            },
+            {
+              "height": 364,
+              "original_size": true,
+              "type": "thumb364x428",
+              "url": "https://images.example.invalid/item10-thumb/1.jpg",
+              "width": 204
+            }
+          ],
+          "url": "https://images.example.invalid/item10/1.jpg",
+          "width": 450
+        }
+      ],
+      "price": {
+        "amount": "30.00",
+        "currency_code": "EUR"
+      },
+      "promoted": false,
+      "service_fee": {
+        "amount": "2.20",
+        "currency_code": "EUR"
+      },
+      "show_1st_time_seller_discount": false,
+      "title": "Sweat Ralph Lauren",
+      "total_item_price": {
+        "amount": "32.20",
+        "currency_code": "EUR"
+      },
+      "url": "/items/10383239619-sweat-ralph-lauren",
+      "user": {
+        "business": false,
+        "id": 900009,
+        "login": "seller_9"
+      },
+      "view_count": 0
+    },
+    {
+      "content_source": "catalog",
+      "favourite_count": 0,
+      "id": 10383233172,
+      "is_favourite": false,
+      "item_box": {
+        "accessibility_label": "Sweat col polo Estate Rib coton manches longues boutons écru XS Ralph Lauren, Marke: Ralph Lauren, Zustand: Sehr gut, Größe: XS, 30.00 €, 32.20 €",
+        "exposures": [],
+        "ff_exposures": [],
+        "first_line": "Ralph Lauren",
+        "item_id": 10383233172,
+        "second_line": "XS · Sehr gut"
+      },
+      "photo": {
+        "dominant_color": "#C0C1B4",
+        "dominant_color_opaque": "#ECECE9",
+        "extra": {},
+        "full_size_url": "https://images.example.invalid/item/11.jpg",
+        "height": 800,
+        "high_resolution": {
+          "id": "06_01c41_ufqVyPhBaECXsejznTwjNedV",
+          "orientation": 0
+        },
+        "id": 1,
+        "image_no": 1,
+        "is_main": true,
+        "thumbnails": [
+          {
+            "height": 100,
+            "original_size": null,
+            "type": "thumb70x100",
+            "url": "https://images.example.invalid/item-thumb/11.jpg",
+            "width": 70
+          },
+          {
+            "height": 210,
+            "original_size": null,
+            "type": "thumb150x210",
+            "url": "https://images.example.invalid/item-thumb/11.jpg",
+            "width": 150
+          },
+          {
+            "height": 430,
+            "original_size": null,
+            "type": "thumb310x430",
+            "url": "https://images.example.invalid/item-thumb/11.jpg",
+            "width": 310
+          },
+          {
+            "height": 428,
+            "original_size": true,
+            "type": "thumb428x624",
+            "url": "https://images.example.invalid/item-thumb/11.jpg",
+            "width": 321
+          },
+          {
+            "height": 624,
+            "original_size": true,
+            "type": "thumb624x428",
+            "url": "https://images.example.invalid/item-thumb/11.jpg",
+            "width": 468
+          },
+          {
+            "height": 364,
+            "original_size": true,
+            "type": "thumb364x428",
+            "url": "https://images.example.invalid/item-thumb/11.jpg",
+            "width": 273
+          }
+        ],
+        "url": "https://images.example.invalid/item/11.jpg",
+        "width": 600
+      },
+      "photos": [
+        {
+          "dominant_color": "#C0C1B4",
+          "dominant_color_opaque": "#ECECE9",
+          "extra": {},
+          "full_size_url": "https://images.example.invalid/item11/1.jpg",
+          "height": 800,
+          "high_resolution": {
+            "id": "06_01c41_ufqVyPhBaECXsejznTwjNedV",
+            "orientation": 0
+          },
+          "id": 1,
+          "image_no": 1,
+          "is_main": true,
+          "thumbnails": [
+            {
+              "height": 100,
+              "original_size": null,
+              "type": "thumb70x100",
+              "url": "https://images.example.invalid/item11-thumb/1.jpg",
+              "width": 70
+            },
+            {
+              "height": 210,
+              "original_size": null,
+              "type": "thumb150x210",
+              "url": "https://images.example.invalid/item11-thumb/1.jpg",
+              "width": 150
+            },
+            {
+              "height": 430,
+              "original_size": null,
+              "type": "thumb310x430",
+              "url": "https://images.example.invalid/item11-thumb/1.jpg",
+              "width": 310
+            },
+            {
+              "height": 428,
+              "original_size": true,
+              "type": "thumb428x624",
+              "url": "https://images.example.invalid/item11-thumb/1.jpg",
+              "width": 321
+            },
+            {
+              "height": 624,
+              "original_size": true,
+              "type": "thumb624x428",
+              "url": "https://images.example.invalid/item11-thumb/1.jpg",
+              "width": 468
+            },
+            {
+              "height": 364,
+              "original_size": true,
+              "type": "thumb364x428",
+              "url": "https://images.example.invalid/item11-thumb/1.jpg",
+              "width": 273
+            }
+          ],
+          "url": "https://images.example.invalid/item11/1.jpg",
+          "width": 600
+        }
+      ],
+      "price": {
+        "amount": "30.00",
+        "currency_code": "EUR"
+      },
+      "promoted": false,
+      "service_fee": {
+        "amount": "2.20",
+        "currency_code": "EUR"
+      },
+      "show_1st_time_seller_discount": false,
+      "title": "Sweat col polo Estate Rib coton manches longues boutons écru XS Ralph Lauren",
+      "total_item_price": {
+        "amount": "32.20",
+        "currency_code": "EUR"
+      },
+      "url": "/items/10383233172-sweat-col-polo-estate-rib-coton-manches-longues-boutons-ecru-xs-ralph-lauren",
+      "user": {
+        "business": true,
+        "id": 900001,
+        "login": "seller_1"
+      },
+      "view_count": 0
+    },
+    {
+      "content_source": "catalog",
+      "favourite_count": 3,
+      "id": 10383225464,
+      "is_favourite": false,
+      "item_box": {
+        "accessibility_label": "Verkaufe eine graue Polo Ralph Lauren Sweatjacke mit Reißverschluss (Full-Zip)., Marke: Polo Ralph Lauren, Zustand: Sehr gut, Größe: M, 20.00 €, 21.70 €",
+        "exposures": [],
+        "ff_exposures": [],
+        "first_line": "Polo Ralph Lauren",
+        "item_id": 10383225464,
+        "second_line": "M · Sehr gut"
+      },
+      "photo": {
+        "dominant_color": "#78797C",
+        "dominant_color_opaque": "#D7D7D8",
+        "extra": {},
+        "full_size_url": "https://images.example.invalid/item/12.jpg",
+        "height": 800,
+        "high_resolution": {
+          "id": "06_00478_LMdG31y3rH2CPTX2HXrpnCcR",
+          "orientation": null
+        },
+        "id": 1,
+        "image_no": 1,
+        "is_main": true,
+        "thumbnails": [
+          {
+            "height": 100,
+            "original_size": null,
+            "type": "thumb70x100",
+            "url": "https://images.example.invalid/item-thumb/12.jpg",
+            "width": 70
+          },
+          {
+            "height": 210,
+            "original_size": null,
+            "type": "thumb150x210",
+            "url": "https://images.example.invalid/item-thumb/12.jpg",
+            "width": 150
+          },
+          {
+            "height": 430,
+            "original_size": null,
+            "type": "thumb310x430",
+            "url": "https://images.example.invalid/item-thumb/12.jpg",
+            "width": 310
+          },
+          {
+            "height": 428,
+            "original_size": true,
+            "type": "thumb428x624",
+            "url": "https://images.example.invalid/item-thumb/12.jpg",
+            "width": 321
+          },
+          {
+            "height": 624,
+            "original_size": true,
+            "type": "thumb624x428",
+            "url": "https://images.example.invalid/item-thumb/12.jpg",
+            "width": 468
+          },
+          {
+            "height": 364,
+            "original_size": true,
+            "type": "thumb364x428",
+            "url": "https://images.example.invalid/item-thumb/12.jpg",
+            "width": 273
+          }
+        ],
+        "url": "https://images.example.invalid/item/12.jpg",
+        "width": 600
+      },
+      "photos": [
+        {
+          "dominant_color": "#78797C",
+          "dominant_color_opaque": "#D7D7D8",
+          "extra": {},
+          "full_size_url": "https://images.example.invalid/item12/1.jpg",
+          "height": 800,
+          "high_resolution": {
+            "id": "06_00478_LMdG31y3rH2CPTX2HXrpnCcR",
+            "orientation": null
+          },
+          "id": 1,
+          "image_no": 1,
+          "is_main": true,
+          "thumbnails": [
+            {
+              "height": 100,
+              "original_size": null,
+              "type": "thumb70x100",
+              "url": "https://images.example.invalid/item12-thumb/1.jpg",
+              "width": 70
+            },
+            {
+              "height": 210,
+              "original_size": null,
+              "type": "thumb150x210",
+              "url": "https://images.example.invalid/item12-thumb/1.jpg",
+              "width": 150
+            },
+            {
+              "height": 430,
+              "original_size": null,
+              "type": "thumb310x430",
+              "url": "https://images.example.invalid/item12-thumb/1.jpg",
+              "width": 310
+            },
+            {
+              "height": 428,
+              "original_size": true,
+              "type": "thumb428x624",
+              "url": "https://images.example.invalid/item12-thumb/1.jpg",
+              "width": 321
+            },
+            {
+              "height": 624,
+              "original_size": true,
+              "type": "thumb624x428",
+              "url": "https://images.example.invalid/item12-thumb/1.jpg",
+              "width": 468
+            },
+            {
+              "height": 364,
+              "original_size": true,
+              "type": "thumb364x428",
+              "url": "https://images.example.invalid/item12-thumb/1.jpg",
+              "width": 273
+            }
+          ],
+          "url": "https://images.example.invalid/item12/1.jpg",
+          "width": 600
+        }
+      ],
+      "price": {
+        "amount": "20.00",
+        "currency_code": "EUR"
+      },
+      "promoted": false,
+      "service_fee": {
+        "amount": "1.70",
+        "currency_code": "EUR"
+      },
+      "show_1st_time_seller_discount": false,
+      "title": "Verkaufe eine graue Polo Ralph Lauren Sweatjacke mit Reißverschluss (Full-Zip).",
+      "total_item_price": {
+        "amount": "21.70",
+        "currency_code": "EUR"
+      },
+      "url": "/items/10383225464-verkaufe-eine-graue-polo-ralph-lauren-sweatjacke-mit-reissverschluss-full-zip",
+      "user": {
+        "business": false,
+        "id": 900010,
+        "login": "seller_10"
+      },
+      "view_count": 0
+    },
+    {
+      "content_source": "catalog",
+      "favourite_count": 0,
+      "id": 10383213259,
+      "is_favourite": false,
+      "item_box": {
+        "accessibility_label": "Ralph Lauren Pull col V – Homme XXL – 100 % Pima Cotton, Marke: Ralph Lauren, Zustand: Sehr gut, Größe: XXL, 18.90 €, 20.55 €",
+        "exposures": [],
+        "ff_exposures": [],
+        "first_line": "Ralph Lauren",
+        "item_id": 10383213259,
+        "second_line": "XXL · Sehr gut"
+      },
+      "photo": {
+        "dominant_color": "#3D465F",
+        "dominant_color_opaque": "#C5C8CF",
+        "extra": {},
+        "full_size_url": "https://images.example.invalid/item/13.jpg",
+        "height": 800,
+        "high_resolution": {
+          "id": "06_0016e_CccXUF5RrYoKhxVSiHJTFYjb",
+          "orientation": 0
+        },
+        "id": 1,
+        "image_no": 1,
+        "is_main": true,
+        "thumbnails": [
+          {
+            "height": 100,
+            "original_size": null,
+            "type": "thumb70x100",
+            "url": "https://images.example.invalid/item-thumb/13.jpg",
+            "width": 70
+          },
+          {
+            "height": 210,
+            "original_size": null,
+            "type": "thumb150x210",
+            "url": "https://images.example.invalid/item-thumb/13.jpg",
+            "width": 150
+          },
+          {
+            "height": 430,
+            "original_size": null,
+            "type": "thumb310x430",
+            "url": "https://images.example.invalid/item-thumb/13.jpg",
+            "width": 310
+          },
+          {
+            "height": 428,
+            "original_size": true,
+            "type": "thumb428x624",
+            "url": "https://images.example.invalid/item-thumb/13.jpg",
+            "width": 321
+          },
+          {
+            "height": 624,
+            "original_size": true,
+            "type": "thumb624x428",
+            "url": "https://images.example.invalid/item-thumb/13.jpg",
+            "width": 468
+          },
+          {
+            "height": 364,
+            "original_size": true,
+            "type": "thumb364x428",
+            "url": "https://images.example.invalid/item-thumb/13.jpg",
+            "width": 273
+          }
+        ],
+        "url": "https://images.example.invalid/item/13.jpg",
+        "width": 600
+      },
+      "photos": [
+        {
+          "dominant_color": "#3D465F",
+          "dominant_color_opaque": "#C5C8CF",
+          "extra": {},
+          "full_size_url": "https://images.example.invalid/item13/1.jpg",
+          "height": 800,
+          "high_resolution": {
+            "id": "06_0016e_CccXUF5RrYoKhxVSiHJTFYjb",
+            "orientation": 0
+          },
+          "id": 1,
+          "image_no": 1,
+          "is_main": true,
+          "thumbnails": [
+            {
+              "height": 100,
+              "original_size": null,
+              "type": "thumb70x100",
+              "url": "https://images.example.invalid/item13-thumb/1.jpg",
+              "width": 70
+            },
+            {
+              "height": 210,
+              "original_size": null,
+              "type": "thumb150x210",
+              "url": "https://images.example.invalid/item13-thumb/1.jpg",
+              "width": 150
+            },
+            {
+              "height": 430,
+              "original_size": null,
+              "type": "thumb310x430",
+              "url": "https://images.example.invalid/item13-thumb/1.jpg",
+              "width": 310
+            },
+            {
+              "height": 428,
+              "original_size": true,
+              "type": "thumb428x624",
+              "url": "https://images.example.invalid/item13-thumb/1.jpg",
+              "width": 321
+            },
+            {
+              "height": 624,
+              "original_size": true,
+              "type": "thumb624x428",
+              "url": "https://images.example.invalid/item13-thumb/1.jpg",
+              "width": 468
+            },
+            {
+              "height": 364,
+              "original_size": true,
+              "type": "thumb364x428",
+              "url": "https://images.example.invalid/item13-thumb/1.jpg",
+              "width": 273
+            }
+          ],
+          "url": "https://images.example.invalid/item13/1.jpg",
+          "width": 600
+        }
+      ],
+      "price": {
+        "amount": "18.90",
+        "currency_code": "EUR"
+      },
+      "promoted": false,
+      "service_fee": {
+        "amount": "1.65",
+        "currency_code": "EUR"
+      },
+      "show_1st_time_seller_discount": false,
+      "title": "Ralph Lauren Pull col V – Homme XXL – 100 % Pima Cotton",
+      "total_item_price": {
+        "amount": "20.55",
+        "currency_code": "EUR"
+      },
+      "url": "/items/10383213259-ralph-lauren-pull-col-v-homme-xxl-100-pima-cotton",
+      "user": {
+        "business": false,
+        "id": 900011,
+        "login": "seller_11"
+      },
+      "view_count": 0
+    },
+    {
+      "content_source": "catalog",
+      "favourite_count": 0,
+      "id": 10372138733,
+      "is_favourite": false,
+      "item_box": {
+        "accessibility_label": "Sweat à capuche Polo Ralph Lauren POLO 1992 multicolore blanc S, Marke: Polo Ralph Lauren, Zustand: Gut, Größe: S, 25.00 €, 26.95 €",
+        "exposures": [],
+        "ff_exposures": [],
+        "first_line": "Polo Ralph Lauren",
+        "item_id": 10372138733,
+        "second_line": "S · Gut"
+      },
+      "photo": {
+        "dominant_color": "#B4AEA5",
+        "dominant_color_opaque": "#E9E7E4",
+        "extra": {},
+        "full_size_url": "https://images.example.invalid/item/14.jpg",
+        "height": 800,
+        "high_resolution": {
+          "id": "05_0203b_yhW9Zdx4R3yPqusXvQKaTv38",
+          "orientation": 0
+        },
+        "id": 1,
+        "image_no": 1,
+        "is_main": true,
+        "thumbnails": [
+          {
+            "height": 100,
+            "original_size": null,
+            "type": "thumb70x100",
+            "url": "https://images.example.invalid/item-thumb/14.jpg",
+            "width": 70
+          },
+          {
+            "height": 210,
+            "original_size": null,
+            "type": "thumb150x210",
+            "url": "https://images.example.invalid/item-thumb/14.jpg",
+            "width": 150
+          },
+          {
+            "height": 430,
+            "original_size": null,
+            "type": "thumb310x430",
+            "url": "https://images.example.invalid/item-thumb/14.jpg",
+            "width": 310
+          },
+          {
+            "height": 428,
+            "original_size": true,
+            "type": "thumb428x624",
+            "url": "https://images.example.invalid/item-thumb/14.jpg",
+            "width": 324
+          },
+          {
+            "height": 624,
+            "original_size": true,
+            "type": "thumb624x428",
+            "url": "https://images.example.invalid/item-thumb/14.jpg",
+            "width": 472
+          },
+          {
+            "height": 364,
+            "original_size": true,
+            "type": "thumb364x428",
+            "url": "https://images.example.invalid/item-thumb/14.jpg",
+            "width": 275
+          }
+        ],
+        "url": "https://images.example.invalid/item/14.jpg",
+        "width": 606
+      },
+      "photos": [
+        {
+          "dominant_color": "#B4AEA5",
+          "dominant_color_opaque": "#E9E7E4",
+          "extra": {},
+          "full_size_url": "https://images.example.invalid/item14/1.jpg",
+          "height": 800,
+          "high_resolution": {
+            "id": "05_0203b_yhW9Zdx4R3yPqusXvQKaTv38",
+            "orientation": 0
+          },
+          "id": 1,
+          "image_no": 1,
+          "is_main": true,
+          "thumbnails": [
+            {
+              "height": 100,
+              "original_size": null,
+              "type": "thumb70x100",
+              "url": "https://images.example.invalid/item14-thumb/1.jpg",
+              "width": 70
+            },
+            {
+              "height": 210,
+              "original_size": null,
+              "type": "thumb150x210",
+              "url": "https://images.example.invalid/item14-thumb/1.jpg",
+              "width": 150
+            },
+            {
+              "height": 430,
+              "original_size": null,
+              "type": "thumb310x430",
+              "url": "https://images.example.invalid/item14-thumb/1.jpg",
+              "width": 310
+            },
+            {
+              "height": 428,
+              "original_size": true,
+              "type": "thumb428x624",
+              "url": "https://images.example.invalid/item14-thumb/1.jpg",
+              "width": 324
+            },
+            {
+              "height": 624,
+              "original_size": true,
+              "type": "thumb624x428",
+              "url": "https://images.example.invalid/item14-thumb/1.jpg",
+              "width": 472
+            },
+            {
+              "height": 364,
+              "original_size": true,
+              "type": "thumb364x428",
+              "url": "https://images.example.invalid/item14-thumb/1.jpg",
+              "width": 275
+            }
+          ],
+          "url": "https://images.example.invalid/item14/1.jpg",
+          "width": 606
+        }
+      ],
+      "price": {
+        "amount": "25.00",
+        "currency_code": "EUR"
+      },
+      "promoted": false,
+      "service_fee": {
+        "amount": "1.95",
+        "currency_code": "EUR"
+      },
+      "show_1st_time_seller_discount": false,
+      "title": "Sweat à capuche Polo Ralph Lauren POLO 1992 multicolore blanc S",
+      "total_item_price": {
+        "amount": "26.95",
+        "currency_code": "EUR"
+      },
+      "url": "/items/10372138733-sweat-a-capuche-polo-ralph-lauren-polo-1992-multicolore-blanc-s",
+      "user": {
+        "business": true,
+        "id": 900012,
+        "login": "seller_12"
+      },
+      "view_count": 0
+    },
+    {
+      "content_source": "catalog",
+      "favourite_count": 0,
+      "id": 10372158269,
+      "is_favourite": false,
+      "item_box": {
+        "accessibility_label": "Pull Ralph Lauren, Marke: Polo Ralph Lauren, Zustand: Sehr gut, Größe: M, 24.00 €, 25.90 €",
+        "exposures": [],
+        "ff_exposures": [],
+        "first_line": "Polo Ralph Lauren",
+        "item_id": 10372158269,
+        "second_line": "M · Sehr gut"
+      },
+      "photo": {
+        "dominant_color": "#32312D",
+        "dominant_color_opaque": "#C2C1C0",
+        "extra": {},
+        "full_size_url": "https://images.example.invalid/item/15.jpg",
+        "height": 800,
+        "high_resolution": {
+          "id": "05_02291_wcXA2sK6m2RTdGjuKL9ZygcB",
+          "orientation": null
+        },
+        "id": 1,
+        "image_no": 1,
+        "is_main": true,
+        "thumbnails": [
+          {
+            "height": 100,
+            "original_size": null,
+            "type": "thumb70x100",
+            "url": "https://images.example.invalid/item-thumb/15.jpg",
+            "width": 70
+          },
+          {
+            "height": 210,
+            "original_size": null,
+            "type": "thumb150x210",
+            "url": "https://images.example.invalid/item-thumb/15.jpg",
+            "width": 150
+          },
+          {
+            "height": 430,
+            "original_size": null,
+            "type": "thumb310x430",
+            "url": "https://images.example.invalid/item-thumb/15.jpg",
+            "width": 310
+          },
+          {
+            "height": 428,
+            "original_size": true,
+            "type": "thumb428x624",
+            "url": "https://images.example.invalid/item-thumb/15.jpg",
+            "width": 321
+          },
+          {
+            "height": 624,
+            "original_size": true,
+            "type": "thumb624x428",
+            "url": "https://images.example.invalid/item-thumb/15.jpg",
+            "width": 468
+          },
+          {
+            "height": 364,
+            "original_size": true,
+            "type": "thumb364x428",
+            "url": "https://images.example.invalid/item-thumb/15.jpg",
+            "width": 273
+          }
+        ],
+        "url": "https://images.example.invalid/item/15.jpg",
+        "width": 600
+      },
+      "photos": [
+        {
+          "dominant_color": "#32312D",
+          "dominant_color_opaque": "#C2C1C0",
+          "extra": {},
+          "full_size_url": "https://images.example.invalid/item15/1.jpg",
+          "height": 800,
+          "high_resolution": {
+            "id": "05_02291_wcXA2sK6m2RTdGjuKL9ZygcB",
+            "orientation": null
+          },
+          "id": 1,
+          "image_no": 1,
+          "is_main": true,
+          "thumbnails": [
+            {
+              "height": 100,
+              "original_size": null,
+              "type": "thumb70x100",
+              "url": "https://images.example.invalid/item15-thumb/1.jpg",
+              "width": 70
+            },
+            {
+              "height": 210,
+              "original_size": null,
+              "type": "thumb150x210",
+              "url": "https://images.example.invalid/item15-thumb/1.jpg",
+              "width": 150
+            },
+            {
+              "height": 430,
+              "original_size": null,
+              "type": "thumb310x430",
+              "url": "https://images.example.invalid/item15-thumb/1.jpg",
+              "width": 310
+            },
+            {
+              "height": 428,
+              "original_size": true,
+              "type": "thumb428x624",
+              "url": "https://images.example.invalid/item15-thumb/1.jpg",
+              "width": 321
+            },
+            {
+              "height": 624,
+              "original_size": true,
+              "type": "thumb624x428",
+              "url": "https://images.example.invalid/item15-thumb/1.jpg",
+              "width": 468
+            },
+            {
+              "height": 364,
+              "original_size": true,
+              "type": "thumb364x428",
+              "url": "https://images.example.invalid/item15-thumb/1.jpg",
+              "width": 273
+            }
+          ],
+          "url": "https://images.example.invalid/item15/1.jpg",
+          "width": 600
+        }
+      ],
+      "price": {
+        "amount": "24.00",
+        "currency_code": "EUR"
+      },
+      "promoted": false,
+      "service_fee": {
+        "amount": "1.90",
+        "currency_code": "EUR"
+      },
+      "show_1st_time_seller_discount": false,
+      "title": "Pull Ralph Lauren",
+      "total_item_price": {
+        "amount": "25.90",
+        "currency_code": "EUR"
+      },
+      "url": "/items/10372158269-pull-ralph-lauren",
+      "user": {
+        "business": false,
+        "id": 900013,
+        "login": "seller_13"
+      },
+      "view_count": 0
+    },
+    {
+      "content_source": "catalog",
+      "favourite_count": 1,
+      "id": 10383206334,
+      "is_favourite": false,
+      "item_box": {
+        "accessibility_label": "Pull Ralph Lauren bleu foncé, Marke: Polo Ralph Lauren, Zustand: Sehr gut, Größe: M, 28.00 €, 30.10 €",
+        "exposures": [],
+        "ff_exposures": [],
+        "first_line": "Polo Ralph Lauren",
+        "item_id": 10383206334,
+        "second_line": "M · Sehr gut"
+      },
+      "photo": {
+        "dominant_color": "#111116",
+        "dominant_color_opaque": "#B8B8B9",
+        "extra": {},
+        "full_size_url": "https://images.example.invalid/item/16.jpg",
+        "height": 800,
+        "high_resolution": {
+          "id": "06_019b4_VWp6ZeeC2hewtWqE3wjeT3ee",
+          "orientation": null
+        },
+        "id": 1,
+        "image_no": 1,
+        "is_main": true,
+        "thumbnails": [
+          {
+            "height": 100,
+            "original_size": null,
+            "type": "thumb70x100",
+            "url": "https://images.example.invalid/item-thumb/16.jpg",
+            "width": 70
+          },
+          {
+            "height": 210,
+            "original_size": null,
+            "type": "thumb150x210",
+            "url": "https://images.example.invalid/item-thumb/16.jpg",
+            "width": 150
+          },
+          {
+            "height": 430,
+            "original_size": null,
+            "type": "thumb310x430",
+            "url": "https://images.example.invalid/item-thumb/16.jpg",
+            "width": 310
+          },
+          {
+            "height": 428,
+            "original_size": true,
+            "type": "thumb428x624",
+            "url": "https://images.example.invalid/item-thumb/16.jpg",
+            "width": 321
+          },
+          {
+            "height": 624,
+            "original_size": true,
+            "type": "thumb624x428",
+            "url": "https://images.example.invalid/item-thumb/16.jpg",
+            "width": 468
+          },
+          {
+            "height": 364,
+            "original_size": true,
+            "type": "thumb364x428",
+            "url": "https://images.example.invalid/item-thumb/16.jpg",
+            "width": 273
+          }
+        ],
+        "url": "https://images.example.invalid/item/16.jpg",
+        "width": 600
+      },
+      "photos": [
+        {
+          "dominant_color": "#111116",
+          "dominant_color_opaque": "#B8B8B9",
+          "extra": {},
+          "full_size_url": "https://images.example.invalid/item16/1.jpg",
+          "height": 800,
+          "high_resolution": {
+            "id": "06_019b4_VWp6ZeeC2hewtWqE3wjeT3ee",
+            "orientation": null
+          },
+          "id": 1,
+          "image_no": 1,
+          "is_main": true,
+          "thumbnails": [
+            {
+              "height": 100,
+              "original_size": null,
+              "type": "thumb70x100",
+              "url": "https://images.example.invalid/item16-thumb/1.jpg",
+              "width": 70
+            },
+            {
+              "height": 210,
+              "original_size": null,
+              "type": "thumb150x210",
+              "url": "https://images.example.invalid/item16-thumb/1.jpg",
+              "width": 150
+            },
+            {
+              "height": 430,
+              "original_size": null,
+              "type": "thumb310x430",
+              "url": "https://images.example.invalid/item16-thumb/1.jpg",
+              "width": 310
+            },
+            {
+              "height": 428,
+              "original_size": true,
+              "type": "thumb428x624",
+              "url": "https://images.example.invalid/item16-thumb/1.jpg",
+              "width": 321
+            },
+            {
+              "height": 624,
+              "original_size": true,
+              "type": "thumb624x428",
+              "url": "https://images.example.invalid/item16-thumb/1.jpg",
+              "width": 468
+            },
+            {
+              "height": 364,
+              "original_size": true,
+              "type": "thumb364x428",
+              "url": "https://images.example.invalid/item16-thumb/1.jpg",
+              "width": 273
+            }
+          ],
+          "url": "https://images.example.invalid/item16/1.jpg",
+          "width": 600
+        }
+      ],
+      "price": {
+        "amount": "28.00",
+        "currency_code": "EUR"
+      },
+      "promoted": false,
+      "service_fee": {
+        "amount": "2.10",
+        "currency_code": "EUR"
+      },
+      "show_1st_time_seller_discount": false,
+      "title": "Pull Ralph Lauren bleu foncé",
+      "total_item_price": {
+        "amount": "30.10",
+        "currency_code": "EUR"
+      },
+      "url": "/items/10383206334-pull-ralph-lauren-bleu-fonce",
+      "user": {
+        "business": false,
+        "id": 900014,
+        "login": "seller_14"
+      },
+      "view_count": 0
+    },
+    {
+      "content_source": "catalog",
+      "favourite_count": 0,
+      "id": 10383203008,
+      "is_favourite": false,
+      "item_box": {
+        "accessibility_label": "Polo Ralph Lauren Longsleeve Navy blau Herren Größe XS, Marke: Ralph Lauren, Zustand: Sehr gut, Größe: XS, 29.99 €, 32.19 €",
+        "exposures": [],
+        "ff_exposures": [],
+        "first_line": "Ralph Lauren",
+        "item_id": 10383203008,
+        "second_line": "XS · Sehr gut"
+      },
+      "photo": {
+        "dominant_color": "#1F2E4D",
+        "dominant_color_opaque": "#BCC0CA",
+        "extra": {},
+        "full_size_url": "https://images.example.invalid/item/17.jpg",
+        "height": 800,
+        "high_resolution": {
+          "id": "05_022e3_uJUSG8ueVyi4HckAfTNdwxYq",
+          "orientation": null
+        },
+        "id": 1,
+        "image_no": 1,
+        "is_main": true,
+        "thumbnails": [
+          {
+            "height": 100,
+            "original_size": null,
+            "type": "thumb70x100",
+            "url": "https://images.example.invalid/item-thumb/17.jpg",
+            "width": 70
+          },
+          {
+            "height": 210,
+            "original_size": null,
+            "type": "thumb150x210",
+            "url": "https://images.example.invalid/item-thumb/17.jpg",
+            "width": 150
+          },
+          {
+            "height": 430,
+            "original_size": null,
+            "type": "thumb310x430",
+            "url": "https://images.example.invalid/item-thumb/17.jpg",
+            "width": 310
+          },
+          {
+            "height": 428,
+            "original_size": true,
+            "type": "thumb428x624",
+            "url": "https://images.example.invalid/item-thumb/17.jpg",
+            "width": 241
+          },
+          {
+            "height": 624,
+            "original_size": true,
+            "type": "thumb624x428",
+            "url": "https://images.example.invalid/item-thumb/17.jpg",
+            "width": 351
+          },
+          {
+            "height": 364,
+            "original_size": true,
+            "type": "thumb364x428",
+            "url": "https://images.example.invalid/item-thumb/17.jpg",
+            "width": 204
+          }
+        ],
+        "url": "https://images.example.invalid/item/17.jpg",
+        "width": 450
+      },
+      "photos": [
+        {
+          "dominant_color": "#1F2E4D",
+          "dominant_color_opaque": "#BCC0CA",
+          "extra": {},
+          "full_size_url": "https://images.example.invalid/item17/1.jpg",
+          "height": 800,
+          "high_resolution": {
+            "id": "05_022e3_uJUSG8ueVyi4HckAfTNdwxYq",
+            "orientation": null
+          },
+          "id": 1,
+          "image_no": 1,
+          "is_main": true,
+          "thumbnails": [
+            {
+              "height": 100,
+              "original_size": null,
+              "type": "thumb70x100",
+              "url": "https://images.example.invalid/item17-thumb/1.jpg",
+              "width": 70
+            },
+            {
+              "height": 210,
+              "original_size": null,
+              "type": "thumb150x210",
+              "url": "https://images.example.invalid/item17-thumb/1.jpg",
+              "width": 150
+            },
+            {
+              "height": 430,
+              "original_size": null,
+              "type": "thumb310x430",
+              "url": "https://images.example.invalid/item17-thumb/1.jpg",
+              "width": 310
+            },
+            {
+              "height": 428,
+              "original_size": true,
+              "type": "thumb428x624",
+              "url": "https://images.example.invalid/item17-thumb/1.jpg",
+              "width": 241
+            },
+            {
+              "height": 624,
+              "original_size": true,
+              "type": "thumb624x428",
+              "url": "https://images.example.invalid/item17-thumb/1.jpg",
+              "width": 351
+            },
+            {
+              "height": 364,
+              "original_size": true,
+              "type": "thumb364x428",
+              "url": "https://images.example.invalid/item17-thumb/1.jpg",
+              "width": 204
+            }
+          ],
+          "url": "https://images.example.invalid/item17/1.jpg",
+          "width": 450
+        }
+      ],
+      "price": {
+        "amount": "29.99",
+        "currency_code": "EUR"
+      },
+      "promoted": false,
+      "service_fee": {
+        "amount": "2.20",
+        "currency_code": "EUR"
+      },
+      "show_1st_time_seller_discount": false,
+      "title": "Polo Ralph Lauren Longsleeve Navy blau Herren Größe XS",
+      "total_item_price": {
+        "amount": "32.19",
+        "currency_code": "EUR"
+      },
+      "url": "/items/10383203008-polo-ralph-lauren-longsleeve-navy-blau-herren-grosse-xs",
+      "user": {
+        "business": false,
+        "id": 900015,
+        "login": "seller_15"
+      },
+      "view_count": 0
+    },
+    {
+      "content_source": "catalog",
+      "favourite_count": 0,
+      "id": 10383202915,
+      "is_favourite": false,
+      "item_box": {
+        "accessibility_label": "Pull Ralph Lauren, Marke: Ralph Lauren, Zustand: Sehr gut, Größe: XL, 39.00 €, 41.65 €",
+        "exposures": [],
+        "ff_exposures": [],
+        "first_line": "Ralph Lauren",
+        "item_id": 10383202915,
+        "second_line": "XL · Sehr gut"
+      },
+      "photo": {
+        "dominant_color": "#D4C7B6",
+        "dominant_color_opaque": "#F2EEE9",
+        "extra": {},
+        "full_size_url": "https://images.example.invalid/item/18.jpg",
+        "height": 800,
+        "high_resolution": {
+          "id": "02_02596_6xdBiLjH5eGVf5envWZ8TJr1",
+          "orientation": null
+        },
+        "id": 1,
+        "image_no": 1,
+        "is_main": true,
+        "thumbnails": [
+          {
+            "height": 100,
+            "original_size": null,
+            "type": "thumb70x100",
+            "url": "https://images.example.invalid/item-thumb/18.jpg",
+            "width": 70
+          },
+          {
+            "height": 210,
+            "original_size": null,
+            "type": "thumb150x210",
+            "url": "https://images.example.invalid/item-thumb/18.jpg",
+            "width": 150
+          },
+          {
+            "height": 430,
+            "original_size": null,
+            "type": "thumb310x430",
+            "url": "https://images.example.invalid/item-thumb/18.jpg",
+            "width": 310
+          },
+          {
+            "height": 428,
+            "original_size": true,
+            "type": "thumb428x624",
+            "url": "https://images.example.invalid/item-thumb/18.jpg",
+            "width": 321
+          },
+          {
+            "height": 624,
+            "original_size": true,
+            "type": "thumb624x428",
+            "url": "https://images.example.invalid/item-thumb/18.jpg",
+            "width": 468
+          },
+          {
+            "height": 364,
+            "original_size": true,
+            "type": "thumb364x428",
+            "url": "https://images.example.invalid/item-thumb/18.jpg",
+            "width": 273
+          }
+        ],
+        "url": "https://images.example.invalid/item/18.jpg",
+        "width": 600
+      },
+      "photos": [
+        {
+          "dominant_color": "#D4C7B6",
+          "dominant_color_opaque": "#F2EEE9",
+          "extra": {},
+          "full_size_url": "https://images.example.invalid/item18/1.jpg",
+          "height": 800,
+          "high_resolution": {
+            "id": "02_02596_6xdBiLjH5eGVf5envWZ8TJr1",
+            "orientation": null
+          },
+          "id": 1,
+          "image_no": 1,
+          "is_main": true,
+          "thumbnails": [
+            {
+              "height": 100,
+              "original_size": null,
+              "type": "thumb70x100",
+              "url": "https://images.example.invalid/item18-thumb/1.jpg",
+              "width": 70
+            },
+            {
+              "height": 210,
+              "original_size": null,
+              "type": "thumb150x210",
+              "url": "https://images.example.invalid/item18-thumb/1.jpg",
+              "width": 150
+            },
+            {
+              "height": 430,
+              "original_size": null,
+              "type": "thumb310x430",
+              "url": "https://images.example.invalid/item18-thumb/1.jpg",
+              "width": 310
+            },
+            {
+              "height": 428,
+              "original_size": true,
+              "type": "thumb428x624",
+              "url": "https://images.example.invalid/item18-thumb/1.jpg",
+              "width": 321
+            },
+            {
+              "height": 624,
+              "original_size": true,
+              "type": "thumb624x428",
+              "url": "https://images.example.invalid/item18-thumb/1.jpg",
+              "width": 468
+            },
+            {
+              "height": 364,
+              "original_size": true,
+              "type": "thumb364x428",
+              "url": "https://images.example.invalid/item18-thumb/1.jpg",
+              "width": 273
+            }
+          ],
+          "url": "https://images.example.invalid/item18/1.jpg",
+          "width": 600
+        }
+      ],
+      "price": {
+        "amount": "39.00",
+        "currency_code": "EUR"
+      },
+      "promoted": false,
+      "service_fee": {
+        "amount": "2.65",
+        "currency_code": "EUR"
+      },
+      "show_1st_time_seller_discount": false,
+      "title": "Pull Ralph Lauren",
+      "total_item_price": {
+        "amount": "41.65",
+        "currency_code": "EUR"
+      },
+      "url": "/items/10383202915-pull-ralph-lauren",
+      "user": {
+        "business": false,
+        "id": 900016,
+        "login": "seller_16"
+      },
+      "view_count": 0
+    },
+    {
+      "content_source": "catalog",
+      "favourite_count": 0,
+      "id": 10383196574,
+      "is_favourite": false,
+      "item_box": {
+        "accessibility_label": "Pull en maille gris Slim Fit col V taille L 100 % laine mérinos lavable Polo Ralph Lauren, Marke: Ralph Lauren, Zustand: Sehr gut, Größe: L, 32.00 €, 34.30 €",
+        "exposures": [],
+        "ff_exposures": [],
+        "first_line": "Ralph Lauren",
+        "item_id": 10383196574,
+        "second_line": "L · Sehr gut"
+      },
+      "photo": {
+        "dominant_color": "#2B2D2D",
+        "dominant_color_opaque": "#BFC0C0",
+        "extra": {},
+        "full_size_url": "https://images.example.invalid/item/19.jpg",
+        "height": 800,
+        "high_resolution": {
+          "id": "04_0252a_dgh1tqLFcah574UCUamWBiwy",
+          "orientation": 0
+        },
+        "id": 1,
+        "image_no": 1,
+        "is_main": true,
+        "thumbnails": [
+          {
+            "height": 100,
+            "original_size": null,
+            "type": "thumb70x100",
+            "url": "https://images.example.invalid/item-thumb/19.jpg",
+            "width": 70
+          },
+          {
+            "height": 210,
+            "original_size": null,
+            "type": "thumb150x210",
+            "url": "https://images.example.invalid/item-thumb/19.jpg",
+            "width": 150
+          },
+          {
+            "height": 430,
+            "original_size": null,
+            "type": "thumb310x430",
+            "url": "https://images.example.invalid/item-thumb/19.jpg",
+            "width": 310
+          },
+          {
+            "height": 428,
+            "original_size": true,
+            "type": "thumb428x624",
+            "url": "https://images.example.invalid/item-thumb/19.jpg",
+            "width": 321
+          },
+          {
+            "height": 624,
+            "original_size": true,
+            "type": "thumb624x428",
+            "url": "https://images.example.invalid/item-thumb/19.jpg",
+            "width": 468
+          },
+          {
+            "height": 364,
+            "original_size": true,
+            "type": "thumb364x428",
+            "url": "https://images.example.invalid/item-thumb/19.jpg",
+            "width": 273
+          }
+        ],
+        "url": "https://images.example.invalid/item/19.jpg",
+        "width": 600
+      },
+      "photos": [
+        {
+          "dominant_color": "#2B2D2D",
+          "dominant_color_opaque": "#BFC0C0",
+          "extra": {},
+          "full_size_url": "https://images.example.invalid/item19/1.jpg",
+          "height": 800,
+          "high_resolution": {
+            "id": "04_0252a_dgh1tqLFcah574UCUamWBiwy",
+            "orientation": 0
+          },
+          "id": 1,
+          "image_no": 1,
+          "is_main": true,
+          "thumbnails": [
+            {
+              "height": 100,
+              "original_size": null,
+              "type": "thumb70x100",
+              "url": "https://images.example.invalid/item19-thumb/1.jpg",
+              "width": 70
+            },
+            {
+              "height": 210,
+              "original_size": null,
+              "type": "thumb150x210",
+              "url": "https://images.example.invalid/item19-thumb/1.jpg",
+              "width": 150
+            },
+            {
+              "height": 430,
+              "original_size": null,
+              "type": "thumb310x430",
+              "url": "https://images.example.invalid/item19-thumb/1.jpg",
+              "width": 310
+            },
+            {
+              "height": 428,
+              "original_size": true,
+              "type": "thumb428x624",
+              "url": "https://images.example.invalid/item19-thumb/1.jpg",
+              "width": 321
+            },
+            {
+              "height": 624,
+              "original_size": true,
+              "type": "thumb624x428",
+              "url": "https://images.example.invalid/item19-thumb/1.jpg",
+              "width": 468
+            },
+            {
+              "height": 364,
+              "original_size": true,
+              "type": "thumb364x428",
+              "url": "https://images.example.invalid/item19-thumb/1.jpg",
+              "width": 273
+            }
+          ],
+          "url": "https://images.example.invalid/item19/1.jpg",
+          "width": 600
+        }
+      ],
+      "price": {
+        "amount": "32.00",
+        "currency_code": "EUR"
+      },
+      "promoted": false,
+      "service_fee": {
+        "amount": "2.30",
+        "currency_code": "EUR"
+      },
+      "show_1st_time_seller_discount": false,
+      "title": "Pull en maille gris Slim Fit col V taille L 100 % laine mérinos lavable Polo Ralph Lauren",
+      "total_item_price": {
+        "amount": "34.30",
+        "currency_code": "EUR"
+      },
+      "url": "/items/10383196574-pull-en-maille-gris-slim-fit-col-v-taille-l-100-laine-merinos-lavable-polo-ralph-lauren",
+      "user": {
+        "business": true,
+        "id": 900001,
+        "login": "seller_1"
+      },
+      "view_count": 0
+    },
+    {
+      "content_source": "catalog",
+      "favourite_count": 0,
+      "id": 10383201019,
+      "is_favourite": false,
+      "item_box": {
+        "accessibility_label": "Ralp Lauren, Marke: Polo Ralph Lauren, Zustand: Sehr gut, Größe: L, 35.00 €, 37.45 €",
+        "exposures": [],
+        "ff_exposures": [],
+        "first_line": "Polo Ralph Lauren",
+        "item_id": 10383201019,
+        "second_line": "L · Sehr gut"
+      },
+      "photo": {
+        "dominant_color": "#595048",
+        "dominant_color_opaque": "#CDCBC8",
+        "extra": {},
+        "full_size_url": "https://images.example.invalid/item/20.jpg",
+        "height": 800,
+        "high_resolution": {
+          "id": "06_01bb9_QLSoFgBHAANNbb8Ts8WZs7QY",
+          "orientation": null
+        },
+        "id": 1,
+        "image_no": 1,
+        "is_main": true,
+        "thumbnails": [
+          {
+            "height": 100,
+            "original_size": null,
+            "type": "thumb70x100",
+            "url": "https://images.example.invalid/item-thumb/20.jpg",
+            "width": 70
+          },
+          {
+            "height": 210,
+            "original_size": null,
+            "type": "thumb150x210",
+            "url": "https://images.example.invalid/item-thumb/20.jpg",
+            "width": 150
+          },
+          {
+            "height": 430,
+            "original_size": null,
+            "type": "thumb310x430",
+            "url": "https://images.example.invalid/item-thumb/20.jpg",
+            "width": 310
+          },
+          {
+            "height": 428,
+            "original_size": true,
+            "type": "thumb428x624",
+            "url": "https://images.example.invalid/item-thumb/20.jpg",
+            "width": 290
+          },
+          {
+            "height": 624,
+            "original_size": true,
+            "type": "thumb624x428",
+            "url": "https://images.example.invalid/item-thumb/20.jpg",
+            "width": 423
+          },
+          {
+            "height": 364,
+            "original_size": true,
+            "type": "thumb364x428",
+            "url": "https://images.example.invalid/item-thumb/20.jpg",
+            "width": 246
+          }
+        ],
+        "url": "https://images.example.invalid/item/20.jpg",
+        "width": 542
+      },
+      "photos": [
+        {
+          "dominant_color": "#595048",
+          "dominant_color_opaque": "#CDCBC8",
+          "extra": {},
+          "full_size_url": "https://images.example.invalid/item20/1.jpg",
+          "height": 800,
+          "high_resolution": {
+            "id": "06_01bb9_QLSoFgBHAANNbb8Ts8WZs7QY",
+            "orientation": null
+          },
+          "id": 1,
+          "image_no": 1,
+          "is_main": true,
+          "thumbnails": [
+            {
+              "height": 100,
+              "original_size": null,
+              "type": "thumb70x100",
+              "url": "https://images.example.invalid/item20-thumb/1.jpg",
+              "width": 70
+            },
+            {
+              "height": 210,
+              "original_size": null,
+              "type": "thumb150x210",
+              "url": "https://images.example.invalid/item20-thumb/1.jpg",
+              "width": 150
+            },
+            {
+              "height": 430,
+              "original_size": null,
+              "type": "thumb310x430",
+              "url": "https://images.example.invalid/item20-thumb/1.jpg",
+              "width": 310
+            },
+            {
+              "height": 428,
+              "original_size": true,
+              "type": "thumb428x624",
+              "url": "https://images.example.invalid/item20-thumb/1.jpg",
+              "width": 290
+            },
+            {
+              "height": 624,
+              "original_size": true,
+              "type": "thumb624x428",
+              "url": "https://images.example.invalid/item20-thumb/1.jpg",
+              "width": 423
+            },
+            {
+              "height": 364,
+              "original_size": true,
+              "type": "thumb364x428",
+              "url": "https://images.example.invalid/item20-thumb/1.jpg",
+              "width": 246
+            }
+          ],
+          "url": "https://images.example.invalid/item20/1.jpg",
+          "width": 542
+        }
+      ],
+      "price": {
+        "amount": "35.00",
+        "currency_code": "EUR"
+      },
+      "promoted": false,
+      "service_fee": {
+        "amount": "2.45",
+        "currency_code": "EUR"
+      },
+      "show_1st_time_seller_discount": false,
+      "title": "Ralp Lauren",
+      "total_item_price": {
+        "amount": "37.45",
+        "currency_code": "EUR"
+      },
+      "url": "/items/10383201019-ralp-lauren",
+      "user": {
+        "business": false,
+        "id": 900017,
+        "login": "seller_17"
+      },
+      "view_count": 0
+    }
+  ],
+  "pagination": {
+    "current_page": 1,
+    "per_page": 20,
+    "time": 1792046471,
+    "total_entries": 960,
+    "total_pages": 48
+  },
+  "search_tracking_params": {
+    "global_catalog_browse_session_id": "e13470ed-dd24-4918-a11a-03265f2d03fc",
+    "search_correlation_id": "8ebd8f0e-0159-4668-926c-0006eedb274b",
+    "search_session_id": "ded42ca3-59e9-40ea-9508-419d8d349b11"
+  }
+}
