@@ -281,6 +281,38 @@ class Repository:
     await self._conn.commit()
     return cursor.rowcount
 
+  async def count_pending(self) -> int:
+    async with self._conn.execute(
+      "SELECT COUNT(*) AS n FROM seen_items WHERE status = 'pending'"
+    ) as cursor:
+      row = await cursor.fetchone()
+    return row["n"] if row else 0
+
+  async def count_posted_since(self, since: datetime) -> int:
+    async with self._conn.execute(
+      "SELECT COUNT(*) AS n FROM seen_items WHERE status = 'posted' AND posted_at >= ?",
+      (since.isoformat(),),
+    ) as cursor:
+      row = await cursor.fetchone()
+    return row["n"] if row else 0
+
+  async def cleanup(self, *, items_older_than: timedelta, sellers_older_than: timedelta) -> int:
+    """Datensparsamkeit: alte gesehene Artikel und Verkäufer löschen. Gibt die Anzahl zurück.
+
+    Ungesendete Einträge bleiben (die verwirft expire_stale_outbox). Alte Artikel tauchen in
+    "neueste zuerst" nicht mehr auf – und falls doch, fängt sie der ID-Wasserstand ab.
+    """
+    now = self._now()
+    items = await self._conn.execute(
+      "DELETE FROM seen_items WHERE status != 'pending' AND first_seen_at < ?",
+      ((now - items_older_than).isoformat(),),
+    )
+    sellers = await self._conn.execute(
+      "DELETE FROM sellers WHERE fetched_at < ?", ((now - sellers_older_than).isoformat(),)
+    )
+    await self._conn.commit()
+    return items.rowcount + sellers.rowcount
+
   # --- Schlüssel/Wert (z. B. ID der Discord-Kategorie) ------------------------
 
   async def get_value(self, key: str) -> str | None:

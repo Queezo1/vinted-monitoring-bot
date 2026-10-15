@@ -4,6 +4,9 @@ Ein Durchlauf (`poll_once`):
   Katalog holen -> parsen -> Dedupe -> (Verkäufer nachschlagen -> Länderfilter)
   -> Ergebnis in EINER Transaktion speichern -> Dispatcher wecken.
 `poll_once` gibt zurück, wie lange bis zum nächsten Durchlauf gewartet werden soll.
+
+403/429 regelt der DomainGuard für alle Filter einer Domain gemeinsam (siehe domain_guard.py).
+Andere Fehler (Netzwerk, geändertes Antwortformat) haben einen eigenen Backoff pro Filter.
 """
 
 from __future__ import annotations
@@ -13,10 +16,13 @@ import logging
 import random
 from collections.abc import Awaitable, Callable
 from dataclasses import replace
+from datetime import datetime
 
 from vinted_bot.core.dedupe import select_new
+from vinted_bot.core.domain_guard import DomainBlock, DomainGuard
+from vinted_bot.core.notifications import Notifier, NullNotifier, Severity, StatusEvent
 from vinted_bot.core.seller_lookup import SellerResolver
-from vinted_bot.storage.repository import FilterRow, NewItem, Repository
+from vinted_bot.storage.repository import FilterRow, NewItem, Repository, utc_now
 from vinted_bot.vinted.client import VintedClient
 from vinted_bot.vinted.errors import (
   BlockedError,
@@ -34,10 +40,10 @@ log = logging.getLogger(__name__)
 JITTER = 0.15  # ±15 % Streuung, damit nicht alle Filter im Gleichschritt abfragen
 
 # Backoff-Stufen je Fehlerart: (Start, Maximum) in Sekunden. Verdoppelt sich je Fehler in Folge.
-BACKOFF_BLOCKED = (15 * 60, 6 * 3600)
-BACKOFF_RATE_LIMITED = (2 * 60, 30 * 60)
 BACKOFF_NETWORK = (10, 5 * 60)
 BACKOFF_MALFORMED = (10 * 60, 60 * 60)
+# Ab so vielen Fehlern in Folge gibt es eine Meldung im Admin-Kanal
+FAILING_THRESHOLD = 3
 
 
 class FilterPoller:
@@ -49,16 +55,22 @@ class FilterPoller:
     client: VintedClient,
     sellers: SellerResolver,
     on_new_items: Callable[[], None],
+    guard: DomainGuard | None = None,
+    notifier: Notifier | None = None,
     seller_lookup: bool = True,
     item_details: bool = True,
     sleep: Callable[[float], Awaitable[None]] = asyncio.sleep,
     rng: Callable[[], float] = random.random,
+    now: Callable[[], datetime] = utc_now,
   ) -> None:
     self.filter_id = filter_id
     self._repo = repo
     self._client = client
     self._sellers = sellers
     self._on_new_items = on_new_items
+    self._guard = guard or DomainGuard(now)
+    self._notifier = notifier or NullNotifier()
+    self._now = now
     self._seller_lookup = seller_lookup
     self._item_details = item_details
     self._sleep = sleep
@@ -72,12 +84,34 @@ class FilterPoller:
       if flt is None or flt.paused:
         log.info("Filter %s gelöscht oder pausiert – Poller endet", self.filter_id)
         return
+      # Ist die Domain gesperrt, wird gar nicht erst angefragt
+      until = self._guard.blocked_until(flt.domain)
+      if until is not None:
+        await self._sleep(self._seconds_until(until) + 10 * self._rng())
+        continue
       delay_s = await self.poll_once(flt)
       await self._sleep(delay_s)
 
   async def poll_once(self, flt: FilterRow) -> float:
     try:
       await self._poll(flt)
+    except (BlockedError, RateLimitedError) as error:
+      # Gilt für die ganze Domain: alle Filter pausieren gemeinsam
+      already_blocked = self._guard.blocked_until(flt.domain) is not None
+      block = self._guard.report_error(flt.domain, error)
+      await self._repo.record_poll_error(flt.id, f"{type(error).__name__}: {error}")
+      log.warning(
+        "vinted.%s gesperrt (%s, Stufe %s) bis %s – ausgelöst von Filter %s: %s",
+        flt.domain,
+        block.reason,
+        block.level,
+        block.until.isoformat(timespec="seconds"),
+        flt.id,
+        error,
+      )
+      if not already_blocked:
+        self._notifier.post(_block_event(block))
+      return self._seconds_until(block.until)
     except VintedError as error:
       self._consecutive_errors += 1
       fail_count = await self._repo.record_poll_error(flt.id, f"{type(error).__name__}: {error}")
@@ -91,8 +125,39 @@ class FilterPoller:
         fail_count,
         delay_s,
       )
+      if fail_count == FAILING_THRESHOLD:
+        self._notifier.post(
+          StatusEvent(
+            Severity.WARNING,
+            f"Filter #{flt.id} {flt.name}: wiederholte Fehler",
+            f"{fail_count} Fehler in Folge. Letzter: `{type(error).__name__}: {error}`\n"
+            f"Nächster Versuch in {delay_s / 60:.0f} min. Bei `MalformedResponseError` hat "
+            "Vinted vermutlich die API geändert.",
+            key=f"failing:{flt.id}",
+          )
+        )
       return delay_s
+
     self._consecutive_errors = 0
+    recovery = self._guard.report_success(flt.domain)
+    if recovery is not None:
+      self._notifier.post(
+        StatusEvent(
+          Severity.INFO,
+          f"vinted.{flt.domain} wieder erreichbar",
+          f"Abfragen laufen wieder. Gestört seit <t:{int(recovery.since.timestamp())}:R>.",
+          key=f"recovered:{flt.domain}:{int(recovery.since.timestamp())}",
+        )
+      )
+    elif flt.fail_count >= FAILING_THRESHOLD:
+      self._notifier.post(
+        StatusEvent(
+          Severity.INFO,
+          f"Filter #{flt.id} {flt.name} läuft wieder",
+          f"Nach {flt.fail_count} Fehlern in Folge war die Abfrage wieder erfolgreich.",
+          key=f"filter-ok:{flt.id}:{flt.fail_count}",
+        )
+      )
     return self._jittered(flt.interval_s)
 
   async def _poll(self, flt: FilterRow) -> None:
@@ -118,6 +183,7 @@ class FilterPoller:
           # ohne Land/Bewertung raus, statt Vinted weiter zu bedrängen.
           log.warning("Verkäufer-Lookup gestoppt: %s", error)
           lookups_allowed = False
+          self._post_lookup_blocked(flt.domain, "Verkäufer-Abfrage", error)
         except VintedError as error:
           log.warning("Verkäufer %s nicht abrufbar: %s", item.seller_id, error)
 
@@ -138,6 +204,7 @@ class FilterPoller:
         except (BlockedError, RateLimitedError) as error:
           log.warning("Artikelseiten-Abruf gestoppt: %s", error)
           details_allowed = False
+          self._post_lookup_blocked(flt.domain, "Artikelseite", error)
         except VintedError as error:
           log.warning("Artikelseite %s nicht abrufbar: %s", item.id, error)
       new_items.append(NewItem(item=item, seller=seller))
@@ -175,20 +242,48 @@ class FilterPoller:
       description=details.description,
     )
 
+  def _post_lookup_blocked(self, domain: str, what: str, error: VintedError) -> None:
+    self._notifier.post(
+      StatusEvent(
+        Severity.WARNING,
+        f"{what} auf vinted.{domain} abgewiesen",
+        f"`{error}` – Artikel werden vorerst ohne diese Zusatzinfos gepostet "
+        "(keine Flagge/Bewertung bzw. nur 1 Foto). Der Katalog selbst läuft weiter.",
+        key=f"lookup:{domain}:{what}",
+      )
+    )
+
+  def _seconds_until(self, moment: datetime) -> float:
+    return max(1.0, (moment - self._now()).total_seconds())
+
   def _jittered(self, interval_s: float) -> float:
     return interval_s * (1 + JITTER * (2 * self._rng() - 1))
 
   def _error_delay(self, error: VintedError) -> float:
-    if isinstance(error, BlockedError):
-      start, cap = BACKOFF_BLOCKED
-    elif isinstance(error, RateLimitedError):
-      start, cap = BACKOFF_RATE_LIMITED
-      if error.retry_after_s is not None:
-        start = max(start, error.retry_after_s)
-    elif isinstance(error, MalformedResponseError | UnexpectedStatusError):
+    if isinstance(error, MalformedResponseError | UnexpectedStatusError):
       start, cap = BACKOFF_MALFORMED
     elif isinstance(error, VintedNetworkError):
       start, cap = BACKOFF_NETWORK
     else:
       start, cap = BACKOFF_NETWORK
     return min(cap, start * 2 ** (self._consecutive_errors - 1))
+
+
+def _block_event(block: DomainBlock) -> StatusEvent:
+  until = f"<t:{int(block.until.timestamp())}:R>"
+  if block.reason == "rate_limited":
+    return StatusEvent(
+      Severity.WARNING,
+      f"vinted.{block.domain}: zu viele Anfragen (429)",
+      f"Alle Filter dieser Domain pausieren, nächster Versuch {until} (Stufe {block.level}).\n"
+      "Wenn das öfter passiert: Intervalle erhöhen oder weniger Filter.",
+      key=f"block:{block.domain}:{block.reason}:{block.level}",
+    )
+  return StatusEvent(
+    Severity.ERROR,
+    f"vinted.{block.domain}: Zugriff verweigert (403)",
+    "Vinted weist Anfragen von deiner IP ab. Alle Filter dieser Domain pausieren, "
+    f"nächster Versuch {until} (Stufe {block.level}, steigt bis max. 6 h).\n"
+    "Der Bot umgeht Sperren bewusst nicht. Bleibt es dabei: Intervalle erhöhen oder pausieren.",
+    key=f"block:{block.domain}:{block.reason}:{block.level}",
+  )

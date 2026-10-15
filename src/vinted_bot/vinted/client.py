@@ -28,6 +28,7 @@ from vinted_bot.vinted.errors import (
   VintedNetworkError,
 )
 from vinted_bot.vinted.rate_limiter import GlobalRateLimiter
+from vinted_bot.vinted.stats import RequestStats
 
 log = logging.getLogger(__name__)
 
@@ -45,10 +46,17 @@ class VintedSession:
 
 
 class VintedClient:
-  def __init__(self, http: httpx.AsyncClient, limiter: GlobalRateLimiter, user_agent: str) -> None:
+  def __init__(
+    self,
+    http: httpx.AsyncClient,
+    limiter: GlobalRateLimiter,
+    user_agent: str,
+    stats: RequestStats | None = None,
+  ) -> None:
     self._http = http
     self._limiter = limiter
     self._user_agent = user_agent
+    self.stats = stats or RequestStats()
     # Eine anonyme Session pro Domain, wiederverwendet bis Vinted 401 sagt
     self._sessions: dict[str, VintedSession] = {}
 
@@ -57,7 +65,7 @@ class VintedClient:
   async def fetch_catalog(self, domain: str, params: dict[str, str]) -> list[dict[str, Any]]:
     """Seite 1 der Suche, neueste zuerst. Gibt die rohen Artikel-Dicts zurück."""
     query = {**params, "order": "newest_first", "page": "1", "per_page": str(PER_PAGE)}
-    data = await self._get_json(domain, endpoints.catalog_url(domain), query)
+    data = await self._get_json(domain, "catalog", endpoints.catalog_url(domain), query)
     items = data.get("items")
     if not isinstance(items, list):
       raise MalformedResponseError(f"Katalog ohne items-Liste, Schlüssel: {list(data)[:10]}")
@@ -65,54 +73,50 @@ class VintedClient:
 
   async def fetch_user(self, domain: str, user_id: int) -> dict[str, Any]:
     """Öffentliches Verkäuferprofil (rohes Dict, enthält mehr als wir speichern!)."""
-    return await self._get_json(domain, endpoints.user_url(domain, user_id), None)
+    return await self._get_json(domain, "user", endpoints.user_url(domain, user_id), None)
 
   async def fetch_item_page(self, domain: str, item_id: int) -> str:
     """Öffentliche Artikelseite als HTML (für alle Fotos und die Beschreibung)."""
-    await self._limiter.acquire()
-    try:
-      response = await self._http.get(
-        endpoints.item_url(domain, item_id),
-        headers={
-          "User-Agent": self._user_agent,
-          "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8",
-          "Accept-Language": self._accept_language(domain),
-        },
-      )
-    except httpx.HTTPError as error:
-      raise VintedNetworkError(f"Artikelseite {item_id}: {error!r}") from error
+    response = await self._send(
+      "item_page", endpoints.item_url(domain, item_id), None, self._page_headers(domain)
+    )
     self._raise_for_status(response, f"Artikelseite {item_id}")
     return response.text
 
   # --- Interna -------------------------------------------------------------
 
-  async def _get_json(self, domain: str, url: str, params: dict[str, str] | None) -> dict[str, Any]:
+  async def _send(
+    self, kind: str, url: str, params: dict[str, str] | None, headers: dict[str, str]
+  ) -> httpx.Response:
+    """JEDER Request an Vinted läuft hier durch: Rate-Limiter, Netzwerkfehler, Statistik."""
+    await self._limiter.acquire()
+    try:
+      response = await self._http.get(url, params=params, headers=headers)
+    except httpx.HTTPError as error:
+      self.stats.record(kind, "network")
+      raise VintedNetworkError(f"{kind}: {error!r}") from error
+    self.stats.record(kind, str(response.status_code))
+    return response
+
+  async def _get_json(
+    self, domain: str, kind: str, url: str, params: dict[str, str] | None
+  ) -> dict[str, Any]:
     session = await self._session(domain)
     try:
-      return await self._request_json(domain, url, params, session)
+      return await self._request_json(domain, kind, url, params, session)
     except UnauthorizedError:
       # Token abgelaufen: Session verwerfen, genau EIN neuer Versuch
       log.info("vinted.%s: Session abgelaufen (401), hole neue", domain)
       self._sessions.pop(domain, None)
       session = await self._session(domain)
-      return await self._request_json(domain, url, params, session)
+      return await self._request_json(domain, kind, url, params, session)
 
   async def _session(self, domain: str) -> VintedSession:
     if domain in self._sessions:
       return self._sessions[domain]
-    await self._limiter.acquire()
-    try:
-      response = await self._http.get(
-        endpoints.site_root(domain),
-        headers={
-          "User-Agent": self._user_agent,
-          "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8",
-          "Accept-Language": self._accept_language(domain),
-        },
-      )
-    except httpx.HTTPError as error:
-      raise VintedNetworkError(f"Startseite vinted.{domain}: {error!r}") from error
-
+    response = await self._send(
+      "session", endpoints.site_root(domain), None, self._page_headers(domain)
+    )
     self._raise_for_status(response, f"Startseite vinted.{domain}")
     token = response.cookies.get(SESSION_COOKIE)
     if not token:
@@ -125,7 +129,12 @@ class VintedClient:
     return session
 
   async def _request_json(
-    self, domain: str, url: str, params: dict[str, str] | None, session: VintedSession
+    self,
+    domain: str,
+    kind: str,
+    url: str,
+    params: dict[str, str] | None,
+    session: VintedSession,
   ) -> dict[str, Any]:
     site = endpoints.site_root(domain).rstrip("/")
     locale = _LOCALES.get(domain, "de-AT")
@@ -142,12 +151,7 @@ class VintedClient:
     if session.anon_id:
       headers[ANON_ID_HEADER] = session.anon_id
 
-    await self._limiter.acquire()
-    try:
-      response = await self._http.get(url, params=params, headers=headers)
-    except httpx.HTTPError as error:
-      raise VintedNetworkError(f"{url}: {error!r}") from error
-
+    response = await self._send(kind, url, params, headers)
     self._raise_for_status(response, url)
     try:
       data = response.json()
@@ -169,6 +173,14 @@ class VintedClient:
     if status == 429:
       raise RateLimitedError(f"{what}: 429", _retry_after_s(response))
     raise UnexpectedStatusError(f"{what}: HTTP {status}, {response.text[:120]!r}", status)
+
+  def _page_headers(self, domain: str) -> dict[str, str]:
+    """Header für normale HTML-Seiten (Startseite, Artikelseite)."""
+    return {
+      "User-Agent": self._user_agent,
+      "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8",
+      "Accept-Language": self._accept_language(domain),
+    }
 
   @staticmethod
   def _accept_language(domain: str) -> str:

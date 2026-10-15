@@ -2,11 +2,18 @@
 
 from typing import Any
 
-from tests.conftest import raw_item
-from vinted_bot.core.poller import BACKOFF_BLOCKED, FilterPoller
+from tests.conftest import FakeClock, raw_item
+from vinted_bot.core.domain_guard import BLOCKED_START, DomainGuard
+from vinted_bot.core.notifications import NullNotifier, Severity
+from vinted_bot.core.poller import FAILING_THRESHOLD, FilterPoller
 from vinted_bot.core.seller_lookup import SellerResolver
 from vinted_bot.storage.repository import Repository
-from vinted_bot.vinted.errors import BlockedError, VintedError
+from vinted_bot.vinted.errors import (
+  BlockedError,
+  MalformedResponseError,
+  RateLimitedError,
+  VintedError,
+)
 
 COUNTRY_OF_SELLER = {1: "AT", 2: "DE", 3: "IT"}
 
@@ -47,7 +54,7 @@ class FakeVinted:
 
 
 async def setup(
-  repo: Repository, countries: tuple[str, ...] = ()
+  repo: Repository, countries: tuple[str, ...] = (), **extra: object
 ) -> tuple[FilterPoller, FakeVinted, list[int]]:
   filter_id = await repo.add_filter(
     name="test",
@@ -59,10 +66,12 @@ async def setup(
     countries=countries,
     interval_s=60,
   )
-  return make_poller(repo, filter_id)
+  return make_poller(repo, filter_id, **extra)
 
 
-def make_poller(repo: Repository, filter_id: int) -> tuple[FilterPoller, FakeVinted, list[int]]:
+def make_poller(
+  repo: Repository, filter_id: int, **extra: object
+) -> tuple[FilterPoller, FakeVinted, list[int]]:
   fake = FakeVinted()
   wakeups: list[int] = []
   poller = FilterPoller(
@@ -72,6 +81,7 @@ def make_poller(repo: Repository, filter_id: int) -> tuple[FilterPoller, FakeVin
     sellers=SellerResolver(repo, fake),  # type: ignore[arg-type]
     on_new_items=lambda: wakeups.append(1),
     rng=lambda: 0.5,  # kein Jitter im Test
+    **extra,  # type: ignore[arg-type]
   )
   return poller, fake, wakeups
 
@@ -152,14 +162,75 @@ async def test_blocked_seller_lookup_stops_lookups_but_posts(repo: Repository) -
   assert len(fake.user_calls) == 1  # nach dem ersten 403 keine weiteren Versuche
 
 
-async def test_blocked_catalog_backs_off_and_escalates(repo: Repository) -> None:
-  poller, fake, _ = await setup(repo)
+async def test_403_blocks_domain_escalates_and_recovers(repo: Repository, clock: FakeClock) -> None:
+  guard = DomainGuard(clock)
+  notifier = NullNotifier()
+  poller, fake, _ = await setup(repo, guard=guard, notifier=notifier, now=clock)
   fake.catalogs = [BlockedError("403"), BlockedError("403"), [raw_item(1)]]
-  assert await poll(poller, repo) == BACKOFF_BLOCKED[0]
-  assert await poll(poller, repo) == BACKOFF_BLOCKED[0] * 2
-  assert await poll(poller, repo) == 60  # Erfolg setzt den Backoff zurück
-  flt = await repo.get_filter(poller.filter_id)
-  assert flt is not None and flt.baseline_done
+
+  assert await poll(poller, repo) == BLOCKED_START.total_seconds()
+  assert guard.blocked_until("at") == clock.now + BLOCKED_START
+  assert [e.severity for e in notifier.events] == [Severity.ERROR]
+
+  clock.now += BLOCKED_START  # Sperre abgelaufen, nächster Versuch scheitert erneut
+  assert await poll(poller, repo) == (BLOCKED_START * 2).total_seconds()  # Stufe 2
+  assert "Stufe 2" in notifier.events[-1].text
+
+  clock.now += BLOCKED_START * 2
+  assert await poll(poller, repo) == 60  # Erfolg
+  assert guard.blocked_until("at") is None
+  assert notifier.events[-1].severity is Severity.INFO
+  assert "wieder erreichbar" in notifier.events[-1].title
+
+
+async def test_block_applies_to_all_filters_of_the_domain(
+  repo: Repository, clock: FakeClock
+) -> None:
+  guard = DomainGuard(clock)
+  notifier = NullNotifier()
+  first, fake1, _ = await setup(repo, guard=guard, notifier=notifier, now=clock)
+  fake1.catalogs = [RateLimitedError("429", retry_after_s=300)]
+  assert await poll(first, repo) == 300  # Retry-After wird respektiert
+
+  # Zweiter Filter derselben Domain: run() fragt gar nicht erst an, sondern schläft
+  second_id = await repo.add_filter(
+    name="b", source_url="y", canonical_url="y", domain="at", api_params={}, channel_id=2,
+    countries=(), interval_s=60,
+  )  # fmt: skip
+  sleeps: list[float] = []
+
+  async def fake_sleep(seconds: float) -> None:
+    sleeps.append(seconds)
+    await repo.set_paused(second_id, True)  # Schleife nach dem Schlafen beenden
+
+  second, fake2, _ = make_poller(repo, second_id, guard=guard, now=clock, sleep=fake_sleep)
+  await second.run()
+  assert fake2.catalogs == [] and len(sleeps) == 1 and sleeps[0] >= 300
+  assert len(notifier.events) == 1  # nur EINE Meldung für die Domain
+
+
+async def test_repeated_other_errors_notify_once_then_recover(repo: Repository) -> None:
+  notifier = NullNotifier()
+  poller, fake, _ = await setup(repo, notifier=notifier)
+  fake.catalogs = [MalformedResponseError("kaputt")] * (FAILING_THRESHOLD + 1) + [[raw_item(1)]]
+  for _ in range(FAILING_THRESHOLD + 1):
+    await poll(poller, repo)
+  assert [e.key for e in notifier.events] == [f"failing:{poller.filter_id}"]
+  await poll(poller, repo)
+  assert "läuft wieder" in notifier.events[-1].title
+
+
+async def test_blocked_lookup_notifies_but_does_not_block_domain(repo: Repository) -> None:
+  guard = DomainGuard()
+  notifier = NullNotifier()
+  poller, fake, _ = await setup(repo, guard=guard, notifier=notifier)
+  fake.user_error = BlockedError("403")
+  fake.catalogs = [[], [raw_item(2)]]
+  await poll(poller, repo)
+  await poll(poller, repo)
+  assert guard.blocked_until("at") is None
+  assert notifier.events[0].key == "lookup:at:Verkäufer-Abfrage"
+  assert await outbox_ids(repo) == [2]
 
 
 async def test_run_stops_when_filter_paused(repo: Repository) -> None:

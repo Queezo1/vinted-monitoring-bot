@@ -29,9 +29,11 @@ class Dispatcher:
     *,
     idle_s: float = 5.0,
     max_attempts: int = MAX_SEND_ATTEMPTS,
+    on_permanent_failure: Callable[[OutboxEntry, str], Awaitable[None]] | None = None,
   ) -> None:
     self._repo = repo
     self._send = send
+    self._on_permanent_failure = on_permanent_failure
     self._idle_s = idle_s
     self._max_attempts = max_attempts
     self._wake = asyncio.Event()
@@ -60,6 +62,8 @@ class Dispatcher:
       except PermanentSendError as error:
         log.error("Artikel %s (Filter %s) verworfen: %s", entry.item_id, entry.filter_id, error)
         await self._repo.mark_send_failed(entry.filter_id, entry.item_id, max_attempts=1)
+        if self._on_permanent_failure is not None:
+          await self._on_permanent_failure(entry, str(error))
         continue
       except Exception:
         log.exception("Senden von Artikel %s fehlgeschlagen", entry.item_id)
