@@ -105,3 +105,17 @@ async def test_change_countries_and_interval(service: FilterService) -> None:
 async def test_unknown_filter_id(service: FilterService) -> None:
   with pytest.raises(UserError, match="#42"):
     await service.pause(42)
+
+
+async def test_gallery_setting(service: FilterService, repo: Repository) -> None:
+  flt = await service.create(service.prepare(LINK, None, None), "a", 10, item_details=False)
+  assert flt.item_details is False
+  assert (await service.set_item_details(flt.id, True)).item_details is True
+  # Die Einstellung landet auch im Outbox-Eintrag (für den Enricher)
+  from tests.conftest import make_item
+  from vinted_bot.storage.repository import NewItem
+
+  await service.set_item_details(flt.id, False)
+  await repo.save_poll_result(flt.id, new_items=[NewItem(make_item(1), None)], max_seen_id=1)
+  [entry] = await repo.pending_outbox()
+  assert entry.item_details is False

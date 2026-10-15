@@ -55,7 +55,7 @@ def build_status_embed(data: StatusData) -> discord.Embed:
   embed.add_field(name="Takt", value=_pace_text(data), inline=False)
 
   if data.filters:
-    text = "\n\n".join(describe_filter(f) for f in data.filters)
+    text = "\n\n".join(describe_filter(f, data.intervals.get(f.id)) for f in data.filters)
     embed.add_field(name="Filter", value=_fit(text, 1024), inline=False)
   if data.admin_channel_id:
     embed.set_footer(text="Statusmeldungen landen im Admin-Kanal #vinted-status")
@@ -93,9 +93,8 @@ def _pace_text(data: StatusData) -> str:
   per_minute = 60 / data.spacing_s if data.spacing_s else 0
   lines = [f"Abstand zwischen Anfragen: {data.spacing_s:.1f} s (max. {per_minute:.0f}/min)"]
   if data.intervals:
-    values = sorted(set(round(v) for v in data.intervals.values()))
-    shown = " / ".join(f"{v} s" for v in values)
-    lines.append(f"Effektives Intervall pro Filter: {shown}")
+    fastest = min(data.intervals.values())
+    lines.append(f"Schnellster Filter: alle ~{round(fastest)} s (Details unten je Filter)")
   return "\n".join(lines)
 
 

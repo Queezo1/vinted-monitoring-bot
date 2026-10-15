@@ -11,7 +11,7 @@ import aiosqlite
 
 log = logging.getLogger(__name__)
 
-SCHEMA_VERSION = 2
+SCHEMA_VERSION = 3
 
 
 async def open_database(path: Path | str) -> aiosqlite.Connection:
@@ -41,6 +41,8 @@ async def _migrate(conn: aiosqlite.Connection) -> None:
     raise RuntimeError(f"Datenbank hat Schema {version}, dieser Code kennt nur {SCHEMA_VERSION}")
   if version < 2:
     await _migrate_to_v2(conn)
+  if version < 3:
+    await _migrate_to_v3(conn)
   await conn.commit()
 
 
@@ -82,3 +84,14 @@ async def _migrate_to_v2(conn: aiosqlite.Connection) -> None:
   finally:
     await conn.execute("PRAGMA foreign_keys = ON")
   log.info("Datenbank auf Schema 2 migriert (Mindestintervall 10 s)")
+
+
+async def _migrate_to_v3(conn: aiosqlite.Connection) -> None:
+  """v2 -> v3: Spalte item_details (Galerie/Beschreibung pro Filter abschaltbar)."""
+  async with conn.execute("PRAGMA table_info(filters)") as cursor:
+    columns = {row["name"] for row in await cursor.fetchall()}
+  if "item_details" not in columns:  # bei neuen DBs legt schema.sql sie schon an
+    await conn.execute("ALTER TABLE filters ADD COLUMN item_details INTEGER NOT NULL DEFAULT 1")
+  await conn.execute("UPDATE schema_version SET version = 3")
+  await conn.commit()
+  log.info("Datenbank auf Schema 3 migriert (Galerie pro Filter)")

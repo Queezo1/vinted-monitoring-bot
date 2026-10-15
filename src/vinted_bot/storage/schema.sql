@@ -1,4 +1,4 @@
--- Schema Version 2 (v2: Mindestintervall 10 s statt 30 s). Änderungen nur über Migrationen in db.py.
+-- Schema Version 3 (v2: Mindestintervall 10 s; v3: Galerie pro Filter). Änderungen nur über Migrationen in db.py.
 
 CREATE TABLE IF NOT EXISTS schema_version (version INTEGER NOT NULL);
 
@@ -16,6 +16,7 @@ CREATE TABLE IF NOT EXISTS filters (
   paused           INTEGER NOT NULL DEFAULT 0,
   baseline_done    INTEGER NOT NULL DEFAULT 0,    -- 0 = nächster Lauf setzt nur die Baseline
   max_seen_id      INTEGER,                       -- ID-Wasserstand (siehe core/dedupe.py)
+  item_details     INTEGER NOT NULL DEFAULT 1,    -- 1 = Fotos 2–3 + Beschreibung nachladen
   created_at       TEXT    NOT NULL,
   last_success_at  TEXT,
   last_error       TEXT,

@@ -55,7 +55,9 @@ class FilterService:
       interval_s=self._interval(interval_s),
     )
 
-  async def create(self, prepared: PreparedFilter, name: str, channel_id: int) -> FilterRow:
+  async def create(
+    self, prepared: PreparedFilter, name: str, channel_id: int, *, item_details: bool = True
+  ) -> FilterRow:
     existing = await self._repo.find_filter(
       prepared.parsed.canonical_url, prepared.countries, channel_id
     )
@@ -73,6 +75,8 @@ class FilterService:
       countries=prepared.countries,
       interval_s=prepared.interval_s,
     )
+    if not item_details:
+      await self._repo.set_item_details(filter_id, False)
     self._manager.start(filter_id)
     log.info("Filter %s (%s) angelegt", filter_id, name)
     return await self._get(filter_id)
@@ -117,6 +121,11 @@ class FilterService:
   async def set_interval(self, filter_id: int, interval_s: int) -> FilterRow:
     await self._get(filter_id)
     await self._repo.set_interval(filter_id, self._interval(interval_s))
+    return await self._get(filter_id)
+
+  async def set_item_details(self, filter_id: int, enabled: bool) -> FilterRow:
+    await self._get(filter_id)
+    await self._repo.set_item_details(filter_id, enabled)
     return await self._get(filter_id)
 
   async def list(self) -> list[FilterRow]:

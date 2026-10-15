@@ -28,7 +28,10 @@ class FilterManager:
     )
 
   def active_count(self) -> int:
-    return sum(1 for task in self._tasks.values() if not task.done())
+    return len(self.active_ids())
+
+  def active_ids(self) -> set[int]:
+    return {filter_id for filter_id, task in self._tasks.items() if not task.done()}
 
   def start_all(self, filter_ids: list[int]) -> None:
     for index, filter_id in enumerate(filter_ids):

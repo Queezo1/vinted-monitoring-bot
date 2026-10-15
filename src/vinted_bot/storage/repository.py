@@ -37,6 +37,7 @@ class FilterRow:
   last_success_at: datetime | None = None
   last_error: str | None = None
   fail_count: int = 0
+  item_details: bool = True  # Fotos 2–3 + Beschreibung nachladen?
 
 
 @dataclass(frozen=True)
@@ -49,6 +50,7 @@ class OutboxEntry:
   item: VintedItem
   seller: SellerInfo | None
   first_seen_at: datetime
+  item_details: bool = True  # Einstellung des Filters zum Zeitpunkt des Postens
 
 
 @dataclass(frozen=True)
@@ -137,6 +139,9 @@ class Repository:
   async def set_interval(self, filter_id: int, interval_s: int) -> None:
     await self._update_filter(filter_id, "interval_s = ?", interval_s)
 
+  async def set_item_details(self, filter_id: int, enabled: bool) -> None:
+    await self._update_filter(filter_id, "item_details = ?", int(enabled))
+
   async def delete_filter(self, filter_id: int) -> None:
     """Löscht den Filter samt gesehener Artikel (ON DELETE CASCADE)."""
     await self._conn.execute("DELETE FROM filters WHERE id = ?", (filter_id,))
@@ -219,7 +224,7 @@ class Repository:
     """Ungesendete Einträge, älteste zuerst."""
     async with self._conn.execute(
       """SELECT s.filter_id, s.item_id, s.payload_json, s.first_seen_at,
-                f.channel_id, f.name, f.domain
+                f.channel_id, f.name, f.domain, f.item_details
          FROM seen_items s JOIN filters f ON f.id = s.filter_id
          WHERE s.status = 'pending'
          ORDER BY s.first_seen_at, s.item_id
@@ -241,6 +246,7 @@ class Repository:
           item=VintedItem.from_json_dict(payload["item"]),
           seller=seller,
           first_seen_at=datetime.fromisoformat(row["first_seen_at"]),
+          item_details=bool(row["item_details"]),
         )
       )
     return entries
@@ -391,4 +397,5 @@ def _filter_from_row(row: aiosqlite.Row) -> FilterRow:
     else None,
     last_error=row["last_error"],
     fail_count=row["fail_count"],
+    item_details=bool(row["item_details"]),
   )

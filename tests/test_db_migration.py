@@ -39,6 +39,8 @@ async def test_v1_database_is_migrated_without_data_loss(tmp_path: Path) -> None
     assert (await cursor.fetchone())["version"] == SCHEMA_VERSION
   async with conn.execute("SELECT name, countries, interval_s FROM filters") as cursor:
     assert tuple(await cursor.fetchone()) == ("rl", "AT", 60)
+  async with conn.execute("SELECT item_details FROM filters") as cursor:
+    assert (await cursor.fetchone())["item_details"] == 1  # v3: Standard = Galerie an
   async with conn.execute("SELECT item_id FROM seen_items") as cursor:
     assert [r["item_id"] for r in await cursor.fetchall()] == [111]  # nicht weg-kaskadiert
 

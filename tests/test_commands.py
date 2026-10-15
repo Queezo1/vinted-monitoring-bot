@@ -61,7 +61,7 @@ def test_describe_paused_and_failing() -> None:
 def test_command_tree_structure() -> None:
   group = FilterCommands(bot=None, service=None, repo=None)  # type: ignore[arg-type]
   names = sorted(command.name for command in group.commands)
-  assert names == ["add", "intervall", "laender", "list", "pause", "remove", "resume"]
+  assert names == ["add", "galerie", "intervall", "laender", "list", "pause", "remove", "resume"]
   assert group.guild_only
   assert group.default_permissions is not None and group.default_permissions.administrator
 
@@ -74,9 +74,10 @@ def test_command_tree_structure() -> None:
     "laender": False,
     "intervall": False,
     "kanal": False,
+    "galerie": False,
   }
 
-  for name in ("pause", "resume", "remove", "laender", "intervall"):
+  for name in ("pause", "resume", "remove", "laender", "intervall", "galerie"):
     command = group.get_command(name)
     filter_param = next(p for p in command.parameters if p.name == "filter")  # type: ignore[union-attr]
     assert filter_param.autocomplete, f"/filter {name} braucht Autovervollständigung"

@@ -25,6 +25,7 @@ from discord import app_commands
 
 from vinted_bot import __version__
 from vinted_bot.config import Settings
+from vinted_bot.core.budget import effective_intervals
 from vinted_bot.core.dispatcher import Dispatcher, PermanentSendError
 from vinted_bot.core.domain_guard import DomainGuard
 from vinted_bot.core.enricher import Enricher
@@ -50,9 +51,6 @@ OUTBOX_MAX_AGE = timedelta(hours=1)
 HOUSEKEEPING_EVERY_S = 6 * 3600
 KEEP_ITEMS = timedelta(days=30)
 KEEP_SELLERS = timedelta(days=60)
-# Anteil des Anfrage-Budgets für Katalog-Abfragen; der Rest bleibt für Länder-Lookups und
-# das Nachladen. Bei 5 Filtern und 3 s Abstand: 5 × 3 s × 1,5 = 22,5 s pro Filter.
-CATALOG_BUDGET_FACTOR = 1.5
 
 
 class VintedBot(discord.Client):
@@ -71,6 +69,8 @@ class VintedBot(discord.Client):
     self._http_client: httpx.AsyncClient | None = None
     self._tasks: list[asyncio.Task[None]] = []
     self._announced_start = False
+    # Filter-ID -> eingestelltes Intervall (für die Budget-Verteilung, ohne DB-Abfrage)
+    self._wanted_intervals: dict[int, float] = {}
     self.repo: Repository
     self.filters: FilterManager
     self.vinted: VintedClient
@@ -130,6 +130,7 @@ class VintedBot(discord.Client):
 
     active = await self.repo.list_filters(only_active=True)
     log.info("Starte %s aktive(n) Filter: %s", len(active), ", ".join(f.name for f in active))
+    self._wanted_intervals = {f.id: float(f.interval_s) for f in active}
     self.filters.start_all([f.id for f in active])
     self._start_task(self._after_ready(dispatcher.run()), "dispatcher")
     self._start_task(self._after_ready(self.enricher.run()), "enricher")
@@ -168,13 +169,18 @@ class VintedBot(discord.Client):
     await super().close()
 
   def effective_interval(self, flt: FilterRow) -> float:
-    """Eingestelltes Intervall – bei vielen Filtern gestreckt, damit das Budget reicht.
+    """Tatsächliches Intervall dieses Filters – Budget nach Priorität verteilt (core/budget.py).
 
-    Alle Filter teilen sich EINE IP und damit ein Anfrage-Budget (Abstand ≥ spacing_s).
-    Steigt der Abstand nach 429/403, werden auch die Intervalle automatisch länger.
+    Jeder Poller meldet hier vor dem Warten sein aktuell eingestelltes Intervall; so wirken
+    Änderungen per /filter intervall sofort. Steigt der Abstand nach 429/403, werden alle
+    Intervalle automatisch länger.
     """
-    budget = self.filters.active_count() * self.limiter.spacing_s * CATALOG_BUDGET_FACTOR
-    return max(float(flt.interval_s), budget)
+    self._wanted_intervals[flt.id] = float(flt.interval_s)
+    active = self.filters.active_ids()
+    wanted = {
+      fid: iv for fid, iv in self._wanted_intervals.items() if fid in active or fid == flt.id
+    }
+    return effective_intervals(wanted, self.limiter.spacing_s)[flt.id]
 
   # --- Interna ---------------------------------------------------------------
 

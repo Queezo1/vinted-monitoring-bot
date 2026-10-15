@@ -89,3 +89,26 @@ async def test_block_pauses_enrichment_but_keeps_partial_data(
   clock.now += PAUSE_AFTER_BLOCK + timedelta(seconds=1)
   fake.page_error = None
   assert await enricher.process(EnrichJob(entry(13, seller_id=3), "z", clock.now))
+
+
+async def test_gallery_off_for_filter_loads_only_seller(repo: Repository, clock: FakeClock) -> None:
+  from dataclasses import replace
+
+  enricher, fake, edits = build(repo, clock)
+  job_entry = replace(entry(), item_details=False)
+  assert await enricher.process(EnrichJob(job_entry, "x", clock.now))
+  assert fake.page_calls == []  # keine Artikelseite -> nur 1 Foto
+  assert edits[0][1].seller is not None  # Flagge/Bewertung trotzdem
+
+
+async def test_gallery_off_and_seller_known_is_not_queued(
+  repo: Repository, clock: FakeClock
+) -> None:
+  from dataclasses import replace
+
+  from vinted_bot.vinted.models import SellerInfo
+
+  enricher, _, _ = build(repo, clock)
+  known = replace(entry(), item_details=False, seller=SellerInfo(1, "AT", 1.0, 3, None))
+  enricher.submit(known, "x")
+  assert enricher.pending() == 0

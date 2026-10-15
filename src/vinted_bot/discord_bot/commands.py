@@ -26,16 +26,20 @@ if TYPE_CHECKING:
 log = logging.getLogger(__name__)
 
 
-def describe_filter(flt: FilterRow) -> str:
+def describe_filter(flt: FilterRow, effective_s: float | None = None) -> str:
   """Eine Zeile pro Filter für /filter list und Bestätigungen."""
   countries = " ".join(flag_emoji(c) for c in flt.countries) if flt.countries else "🌍 alle"
   status = "⏸️ pausiert" if flt.paused else "▶️ aktiv"
   if not flt.paused and flt.fail_count:
     status = f"⚠️ {flt.fail_count} Fehler in Folge"
   last = _relative(flt.last_success_at) if flt.last_success_at else "noch nie"
+  interval = f"alle {flt.interval_s} s"
+  photos = "" if flt.item_details else " · 📷 1 Foto"
+  if effective_s is not None and not flt.paused and round(effective_s) > flt.interval_s:
+    interval += f" (effektiv ~{round(effective_s)} s)"
   return (
     f"**#{flt.id} {flt.name}** · <#{flt.channel_id}> · {status}\n"
-    f"Länder: {countries} · alle {flt.interval_s} s · vinted.{flt.domain} · "
+    f"Länder: {countries} · {interval}{photos} · vinted.{flt.domain} · "
     f"letzte Abfrage: {last}"
   )
 
@@ -82,6 +86,7 @@ class FilterCommands(app_commands.Group):
     laender="Nur Verkäufer aus diesen Ländern, z. B. at,de,it,fr – leer = alle",
     intervall="Abfrageintervall in Sekunden (10–3600, Standard 10)",
     kanal="Vorhandenen Kanal verwenden statt einen neuen anzulegen",
+    galerie="Bis zu 3 Fotos + Beschreibung nachladen (Standard: ja; nein spart Anfragen)",
   )
   async def add(
     self,
@@ -91,6 +96,7 @@ class FilterCommands(app_commands.Group):
     laender: str | None = None,
     intervall: app_commands.Range[int, 10, 3600] | None = None,
     kanal: discord.TextChannel | None = None,
+    galerie: bool = True,
   ) -> None:
     # Kanal anlegen kann länger als 3 s dauern -> Antwort ankündigen
     await interaction.response.defer(ephemeral=True, thinking=True)
@@ -106,7 +112,7 @@ class FilterCommands(app_commands.Group):
       topic = f"Vinted-Filter: {prepared.parsed.canonical_url}"
       channel = await create_filter_channel(interaction.guild, self.repo, filter_name, topic)
 
-    flt = await self.service.create(prepared, filter_name, channel.id)
+    flt = await self.service.create(prepared, filter_name, channel.id, item_details=galerie)
     lines = [
       "✅ Filter angelegt:",
       describe_filter(flt),
@@ -128,7 +134,13 @@ class FilterCommands(app_commands.Group):
       await _reply(interaction, "Noch keine Filter. Lege einen mit `/filter add` an.")
       return
     embed = discord.Embed(title="Vinted-Filter", color=VINTED_TEAL)
-    embed.description = "\n\n".join(describe_filter(f) for f in filters)[:4096]
+    embed.description = "\n\n".join(
+      describe_filter(f, self.bot.effective_interval(f) if not f.paused else None) for f in filters
+    )[:4096]
+    embed.set_footer(
+      text="Tipp: Unwichtige Filter auf 60–120 s stellen (/filter intervall) – "
+      "dann werden die wichtigen schneller."
+    )
     await interaction.response.send_message(embed=embed, ephemeral=True)
 
   # --- /filter pause | resume | remove -------------------------------------------
@@ -189,7 +201,23 @@ class FilterCommands(app_commands.Group):
     sekunden: app_commands.Range[int, 10, 3600],
   ) -> None:
     flt = await self.service.set_interval(filter, sekunden)
-    await _reply(interaction, f"⏱️ Geändert:\n{describe_filter(flt)}")
+    await _reply(
+      interaction, f"⏱️ Geändert:\n{describe_filter(flt, self.bot.effective_interval(flt))}"
+    )
+
+  @app_commands.command(name="galerie", description="Fotos 2–3 + Beschreibung an/aus")
+  @app_commands.describe(
+    filter="Welcher Filter?",
+    an="An: bis zu 3 Fotos + Beschreibung. Aus: nur 1 Foto (spart Anfragen an Vinted)",
+  )
+  async def gallery(
+    self,
+    interaction: discord.Interaction,
+    filter: int,  # noqa: A002
+    an: bool,
+  ) -> None:
+    flt = await self.service.set_item_details(filter, an)
+    await _reply(interaction, f"📷 Geändert:\n{describe_filter(flt)}")
 
   # --- Autovervollständigung für den Parameter "filter" --------------------------
 
@@ -198,6 +226,7 @@ class FilterCommands(app_commands.Group):
   @remove.autocomplete("filter")
   @countries.autocomplete("filter")
   @interval.autocomplete("filter")
+  @gallery.autocomplete("filter")
   async def filter_autocomplete(
     self, interaction: discord.Interaction, current: str
   ) -> list[app_commands.Choice[int]]:

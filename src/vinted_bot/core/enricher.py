@@ -97,7 +97,7 @@ class Enricher:
     try:
       if seller is None and self._seller_lookup and item.seller_id is not None:
         seller = await self._sellers.resolve(entry.domain, item.seller_id, low_priority=True)
-      if self._item_details:
+      if self._item_details and entry.item_details:
         page = await self._client.fetch_item_page(entry.domain, item.id, low_priority=True)
         details = parse_item_page(page, item.id, item.title)
         item = replace(
@@ -119,7 +119,7 @@ class Enricher:
 
   def _needs_work(self, entry: OutboxEntry) -> bool:
     missing_seller = entry.seller is None and self._seller_lookup
-    return self._item_details or missing_seller
+    return (self._item_details and entry.item_details) or missing_seller
 
   def _pause(self, domain: str, error: VintedError) -> None:
     self._paused_until = self._now() + PAUSE_AFTER_BLOCK

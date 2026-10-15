@@ -162,7 +162,7 @@ def test_status_embed_shows_blocks_and_stats(clock: FakeClock) -> None:
   assert "Fehler: 403: 1" in text
   assert "7 · 0 wartend" in text
   assert "3.0 s (max. 20/min)" in text
-  assert "10 s / 22 s" in text
+  assert "Schnellster Filter: alle ~10 s" in text
 
 
 def test_status_embed_all_good(clock: FakeClock) -> None:
