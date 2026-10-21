@@ -19,7 +19,7 @@ from vinted_bot.vinted.url_parser import InvalidFilterUrlError, parse_filter_url
 
 # Untergrenze pro Filter (vinted-sniper nutzt dieselbe). Darunter steigt das Sperrrisiko
 # stark, während der Gewinn klein ist (Vinted zeigt neue Artikel ohnehin verzögert an).
-MIN_INTERVAL_S = 10
+MIN_INTERVAL_S = 5
 MIN_SPACING_S = 2.0
 
 # Ehrlicher User-Agent: sagt, was wir sind. Ob Vinted ihn akzeptiert, klärt die M0-Probe.

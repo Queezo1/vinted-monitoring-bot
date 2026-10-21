@@ -12,7 +12,7 @@ from vinted_bot.storage.db import SCHEMA_VERSION, open_database
 def create_v1_database(path: Path) -> None:
   schema = resources.files("vinted_bot.storage").joinpath("schema.sql").read_text("utf-8")
   v1_schema = schema.replace(
-    "DEFAULT 10 CHECK (interval_s >= 10)", "DEFAULT 60 CHECK (interval_s >= 30)"
+    "DEFAULT 10 CHECK (interval_s >= 5)", "DEFAULT 60 CHECK (interval_s >= 30)"
   )
   assert v1_schema != schema
   conn = sqlite3.connect(path)
@@ -44,10 +44,10 @@ async def test_v1_database_is_migrated_without_data_loss(tmp_path: Path) -> None
   async with conn.execute("SELECT item_id FROM seen_items") as cursor:
     assert [r["item_id"] for r in await cursor.fetchall()] == [111]  # nicht weg-kaskadiert
 
-  # 10 s ist jetzt erlaubt, 9 s nicht
-  await conn.execute("UPDATE filters SET interval_s = 10")
+  # 5 s ist jetzt erlaubt (Schema 4), 4 s nicht
+  await conn.execute("UPDATE filters SET interval_s = 5")
   with pytest.raises(sqlite3.IntegrityError):
-    await conn.execute("UPDATE filters SET interval_s = 9")
+    await conn.execute("UPDATE filters SET interval_s = 4")
   # Fremdschlüssel wieder aktiv: Löschen kaskadiert
   await conn.execute("DELETE FROM filters")
   async with conn.execute("SELECT COUNT(*) AS n FROM seen_items") as cursor:

@@ -63,7 +63,7 @@ async def test_duplicate_in_same_channel_is_rejected(service: FilterService) -> 
   [
     ("https://example.com", None, None, "Ungültiger Link"),
     (LINK, "at,xx", None, "Unbekannte Länderkürzel"),
-    (LINK, None, 5, "Intervall"),
+    (LINK, None, 3, "Intervall"),
     (LINK, None, 99999, "Intervall"),
   ],
 )

@@ -67,9 +67,11 @@ class VintedClient:
 
   # --- Öffentliche Methoden ------------------------------------------------
 
-  async def fetch_catalog(self, domain: str, params: dict[str, str]) -> list[dict[str, Any]]:
+  async def fetch_catalog(
+    self, domain: str, params: dict[str, str], *, per_page: int = PER_PAGE
+  ) -> list[dict[str, Any]]:
     """Seite 1 der Suche, neueste zuerst. Gibt die rohen Artikel-Dicts zurück."""
-    query = {**params, "order": "newest_first", "page": "1", "per_page": str(PER_PAGE)}
+    query = {**params, "order": "newest_first", "page": "1", "per_page": str(per_page)}
     data = await self._get_json(domain, "catalog", endpoints.catalog_url(domain), query)
     items = data.get("items")
     if not isinstance(items, list):

@@ -136,8 +136,13 @@ def build_message(entry: OutboxEntry) -> tuple[list[discord.Embed], discord.ui.V
       embeds.append(discord.Embed(url=item.url, color=VINTED_TEAL).set_image(url=photo))
 
   view = discord.ui.View(timeout=None)
+  # Einen direkten Checkout-Link gibt es bei Vinted nicht (alter Pfad liefert 404, der Kauf
+  # startet per JavaScript im eingeloggten Browser). "Jetzt kaufen" öffnet daher die
+  # Artikelseite – dort ist "Kaufen" ein Klick. Der Bot selbst kauft nie.
   view.add_item(
-    discord.ui.Button(style=discord.ButtonStyle.link, label="Ansehen", emoji="🔍", url=item.url)
+    discord.ui.Button(
+      style=discord.ButtonStyle.link, label="Jetzt kaufen", emoji="🛒", url=item.url
+    )
   )
   if item.seller_id:
     view.add_item(

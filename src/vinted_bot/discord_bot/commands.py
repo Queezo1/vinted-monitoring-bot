@@ -84,7 +84,7 @@ class FilterCommands(app_commands.Group):
     link="Vinted-Link aus der Adresszeile (vinted.at oder vinted.de)",
     name="Anzeigename, wird auch Kanalname (z. B. ralph-lauren-jacken)",
     laender="Nur Verkäufer aus diesen Ländern, z. B. at,de,it,fr – leer = alle",
-    intervall="Abfrageintervall in Sekunden (10–3600, Standard 10)",
+    intervall="Abfrageintervall in Sekunden (5–3600, Standard 10)",
     kanal="Vorhandenen Kanal verwenden statt einen neuen anzulegen",
     galerie="Bis zu 3 Fotos + Beschreibung nachladen (Standard: ja; nein spart Anfragen)",
   )
@@ -94,7 +94,7 @@ class FilterCommands(app_commands.Group):
     link: str,
     name: str | None = None,
     laender: str | None = None,
-    intervall: app_commands.Range[int, 10, 3600] | None = None,
+    intervall: app_commands.Range[int, 5, 3600] | None = None,
     kanal: discord.TextChannel | None = None,
     galerie: bool = True,
   ) -> None:
@@ -193,12 +193,12 @@ class FilterCommands(app_commands.Group):
     await _reply(interaction, f"🌍 Geändert:\n{describe_filter(flt)}")
 
   @app_commands.command(name="intervall", description="Abfrageintervall ändern")
-  @app_commands.describe(filter="Welcher Filter?", sekunden="10–3600")
+  @app_commands.describe(filter="Welcher Filter?", sekunden="5–3600")
   async def interval(
     self,
     interaction: discord.Interaction,
     filter: int,  # noqa: A002
-    sekunden: app_commands.Range[int, 10, 3600],
+    sekunden: app_commands.Range[int, 5, 3600],
   ) -> None:
     flt = await self.service.set_interval(filter, sekunden)
     await _reply(

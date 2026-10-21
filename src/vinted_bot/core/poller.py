@@ -50,6 +50,10 @@ BACKOFF_NETWORK = (10, 5 * 60)
 BACKOFF_MALFORMED = (10 * 60, 60 * 60)
 # Ab so vielen Fehlern in Folge gibt es eine Meldung im Admin-Kanal
 FAILING_THRESHOLD = 3
+# Schnelle Filter brauchen weniger Artikel pro Abfrage: In ≤ 10 s kommen nie 10 neue dazu.
+# Kleinere Antwort = etwas schneller und weniger Last für Vinted.
+FAST_INTERVAL_S = 10
+FAST_PER_PAGE = 10
 
 
 class FilterPoller:
@@ -170,7 +174,12 @@ class FilterPoller:
     return self._jittered(self._interval_for(flt))
 
   async def _poll(self, flt: FilterRow) -> None:
-    raw_items = await self._client.fetch_catalog(flt.domain, flt.api_params)
+    if flt.interval_s <= FAST_INTERVAL_S and flt.baseline_done:
+      raw_items = await self._client.fetch_catalog(
+        flt.domain, flt.api_params, per_page=FAST_PER_PAGE
+      )
+    else:
+      raw_items = await self._client.fetch_catalog(flt.domain, flt.api_params)
     items = [item for raw in raw_items if (item := parse_item(raw, flt.domain)) is not None]
     if len(items) < len(raw_items):
       log.warning("Filter %s: %s Artikel nicht lesbar", flt.id, len(raw_items) - len(items))

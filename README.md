@@ -34,7 +34,8 @@ Der Bot läuft immer nur einmal. Ein zweiter Start beendet sich sofort, die Sper
 
 ## Tempo: wie schnell sehe ich neue Artikel?
 
-- **Takt:** Höchstens 20 Anfragen/min an Vinted (3 s Abstand), verteilt auf alle Filter. Pro Filter mindestens alle 10 s. Bei mehreren Filtern wird das automatisch gestreckt: 6 Filter × 3 s × 1,5 ≈ 27 s. `/status` zeigt den aktuellen Wert.
+- **Takt:** Standard sind höchstens 20 Anfragen/min (`GLOBAL_MIN_SPACING_S=3`), im Turbo bis 30/min (`=2`, das Minimum), verteilt auf alle Filter. Pro Filter sind 5–3600 s einstellbar. Das Intervall wirkt als Gewicht: Unwichtige Filter auf 120–600 s stellen, dann werden die wichtigen schneller. Gemessen am 21.10.2026 mit 2 Top-Filtern auf 5 s: ~5,7 s. `/status` zeigt die aktuellen Werte.
+- **Kauf-Button:** „🛒 Jetzt kaufen“ öffnet die Artikelseite, dort ist „Kaufen“ ein Klick. Einen Direktlink in den Checkout gibt es bei Vinted nicht (der Kaufvorgang wird erst durch den Klick im eingeloggten Browser angelegt). Tipp: Im Discord-Dialog „vinted.at vertrauen“ anhaken.
 - **Sofort posten:** Neue Artikel gehen direkt nach dem Abruf raus. Fotos 2–3, Beschreibung und bei Filtern ohne Länderfilter auch Flagge und Bewertung werden danach nachgeladen, und die Nachricht wird ergänzt.
 - **Länderfilter kosten Zeit:** Für jeden noch unbekannten Verkäufer ist vor dem Posten eine Abfrage nötig. Bekannte Verkäufer liegen 30 Tage im Cache.
 - **Selbstschutz:** Nach 429/403 bremst der Bot selbst ab (Abstand × 1,5, bis 10 s) und wird nach 30 ruhigen Minuten wieder schneller. Schneller als 20 Anfragen/min ist bewusst nicht einstellbar (Minimum 2 s ≈ 30/min).

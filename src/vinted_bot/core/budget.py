@@ -15,7 +15,9 @@ wichtigen schneller.
 
 from __future__ import annotations
 
-CATALOG_BUDGET_FACTOR = 1.5
+# 1,2 = 5/6 des Budgets für Katalog-Abfragen (finden neue Artikel), 1/6 für Länder-Lookups
+# und das Nachladen. Weniger Reserve = schnellere Filter, Nachladen dauert dafür etwas länger.
+CATALOG_BUDGET_FACTOR = 1.2
 
 
 def effective_intervals(

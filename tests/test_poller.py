@@ -27,9 +27,13 @@ class FakeVinted:
     self.user_calls: list[int] = []
     self.user_error: VintedError | None = None
     self.page_calls: list[int] = []
+    self.per_page_calls: list[int] = []
     self.page_error: VintedError | None = None
 
-  async def fetch_catalog(self, domain: str, params: dict[str, str]) -> list[dict[str, Any]]:
+  async def fetch_catalog(
+    self, domain: str, params: dict[str, str], *, per_page: int = 20
+  ) -> list[dict[str, Any]]:
+    self.per_page_calls.append(per_page)
     result = self.catalogs.pop(0)
     if isinstance(result, VintedError):
       raise result
@@ -266,3 +270,12 @@ async def test_throttle_callback_and_effective_interval(repo: Repository, clock:
   assert throttled == [1]  # globaler Takt wird gebremst
   clock.now += timedelta(minutes=5)
   assert await poll(poller, repo) == 22.5  # gestrecktes Intervall statt 60
+
+
+async def test_fast_filter_fetches_only_ten_items_after_baseline(repo: Repository) -> None:
+  poller, fake, _ = await setup(repo)
+  await repo.set_interval(poller.filter_id, 5)
+  fake.catalogs = [[raw_item(1)], [raw_item(2), raw_item(1)]]
+  await poll(poller, repo)  # Baseline: voller Umfang, damit nichts Altes später auftaucht
+  await poll(poller, repo)
+  assert fake.per_page_calls == [20, 10]

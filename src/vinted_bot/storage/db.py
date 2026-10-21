@@ -11,7 +11,7 @@ import aiosqlite
 
 log = logging.getLogger(__name__)
 
-SCHEMA_VERSION = 3
+SCHEMA_VERSION = 4
 
 
 async def open_database(path: Path | str) -> aiosqlite.Connection:
@@ -43,11 +43,20 @@ async def _migrate(conn: aiosqlite.Connection) -> None:
     await _migrate_to_v2(conn)
   if version < 3:
     await _migrate_to_v3(conn)
+  if version < 4:
+    await _rebuild_filters_with_min_interval(conn, minimum_s=5, version=4)
   await conn.commit()
 
 
 async def _migrate_to_v2(conn: aiosqlite.Connection) -> None:
-  """v1 -> v2: Mindestintervall 10 s statt 30 s.
+  """v1 -> v2: Mindestintervall 10 s statt 30 s."""
+  await _rebuild_filters_with_min_interval(conn, minimum_s=10, version=2)
+
+
+async def _rebuild_filters_with_min_interval(
+  conn: aiosqlite.Connection, *, minimum_s: int, version: int
+) -> None:
+  """Ändert das Mindestintervall in der CHECK-Bedingung der Tabelle filters.
 
   SQLite kann CHECK-Bedingungen nicht ändern, deshalb wird die Tabelle nach dem offiziellen
   Verfahren neu aufgebaut (https://sqlite.org/lang_altertable.html, "12 Schritte").
@@ -62,7 +71,7 @@ async def _migrate_to_v2(conn: aiosqlite.Connection) -> None:
   new_sql = re.sub(
     r"CREATE TABLE (IF NOT EXISTS )?\"?filters\"?", "CREATE TABLE filters_new", old_sql
   )
-  new_sql = new_sql.replace("CHECK (interval_s >= 30)", "CHECK (interval_s >= 10)")
+  new_sql = re.sub(r"CHECK \(interval_s >= \d+\)", f"CHECK (interval_s >= {minimum_s})", new_sql)
 
   await conn.commit()
   await conn.execute("PRAGMA foreign_keys = OFF")
@@ -74,16 +83,16 @@ async def _migrate_to_v2(conn: aiosqlite.Connection) -> None:
       INSERT INTO filters_new SELECT * FROM filters;
       DROP TABLE filters;
       ALTER TABLE filters_new RENAME TO filters;
-      UPDATE schema_version SET version = 2;
+      UPDATE schema_version SET version = {version};
       COMMIT;
       """
     )
     async with conn.execute("PRAGMA foreign_key_check") as cursor:
       if await cursor.fetchall():
-        raise RuntimeError("Migration v2: Fremdschlüssel inkonsistent")
+        raise RuntimeError(f"Migration v{version}: Fremdschlüssel inkonsistent")
   finally:
     await conn.execute("PRAGMA foreign_keys = ON")
-  log.info("Datenbank auf Schema 2 migriert (Mindestintervall 10 s)")
+  log.info("Datenbank auf Schema %s migriert (Mindestintervall %s s)", version, minimum_s)
 
 
 async def _migrate_to_v3(conn: aiosqlite.Connection) -> None:

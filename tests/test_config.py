@@ -25,12 +25,12 @@ def test_token_never_appears_in_repr() -> None:
 
 def test_all_problems_are_reported_at_once() -> None:
   with pytest.raises(ConfigError) as info:
-    parse_settings({"GUILD_ID": "abc", "DEFAULT_INTERVAL_S": "5", "LOG_LEVEL": "loud"})
+    parse_settings({"GUILD_ID": "abc", "DEFAULT_INTERVAL_S": "3", "LOG_LEVEL": "loud"})
   problems = "\n".join(info.value.problems)
   assert "DISCORD_TOKEN fehlt" in problems
   assert "GUILD_ID muss eine ganze Zahl sein" in problems
   assert "OWNER_ID fehlt" in problems
-  assert "DEFAULT_INTERVAL_S muss >= 10" in problems
+  assert "DEFAULT_INTERVAL_S muss >= 5" in problems
   assert "LOG_LEVEL" in problems
 
 

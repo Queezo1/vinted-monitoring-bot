@@ -104,7 +104,7 @@ async def test_full_message_with_seller_and_gallery() -> None:
     (b.label, str(b.emoji), b.url) for b in view.children if isinstance(b, discord.ui.Button)
   ]
   assert buttons == [
-    ("Ansehen", "🔍", "https://www.vinted.at/items/7-artikel"),
+    ("Jetzt kaufen", "🛒", "https://www.vinted.at/items/7-artikel"),
     ("Verkäufer", "👤", "https://www.vinted.at/member/1007"),
   ]
 

@@ -465,7 +465,7 @@ Start/Neustart
 | **Footer** | Filtername + Domain | „nike-air-max · vinted.at“ | sicher |
 | **Timestamp** | Zeitpunkt des Postens | | sicher |
 | **Farbe** | Vinted-Türkis `#09B1BA` | | – |
-| **Button „Ansehen“** | `https://www.vinted.<tld>/items/<id>` | Link-Button | sicher |
+| **Button „🛒 Jetzt kaufen“** (seit 20.10.2026, vorher „Ansehen“) | `https://www.vinted.<tld>/items/<id>` | Link-Button | sicher. Öffnet die Artikelseite, dort ist „Kaufen“ 1 Klick (ein Checkout-Deeplink existiert nicht) |
 | **Button „Verkäufer“** | `https://www.vinted.<tld>/member/<user.id>` | Link-Button | sicher |
 | ~~Button „Kaufen“~~ | – | – | **entfällt**: alter Deeplink liefert 404, ein neuer existiert nicht (zweite Probe) |
 
