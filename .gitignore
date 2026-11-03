@@ -26,3 +26,7 @@ htmlcov/
 .idea/
 Thumbs.db
 .DS_Store
+
+# added by push-to-github.ps1
+.env.*
+!.env.example
